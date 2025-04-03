@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -53,8 +52,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: GradientBackground(
-        child: LayoutBuilder(
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: GradientBackground(
+          child: LayoutBuilder(
             builder: (context, constraints) {
               return SingleChildScrollView(
                 child: ConstrainedBox(
@@ -156,6 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             },
+          ),
         ),
       ),
     );

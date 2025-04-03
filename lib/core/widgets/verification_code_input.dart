@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
 import 'package:tb_flutter/core/theme/app_theme.dart';
 
 class VerificationCodeInput extends StatefulWidget {
