@@ -22,6 +22,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   void _handleLoginNext(BuildContext context) {
 
@@ -33,6 +34,12 @@ class _LoginPageState extends State<LoginPage> {
 
   void _handleSignup(BuildContext context) {
     context.go(AppConstants.signUpRoute);
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
   }
 
   @override
@@ -74,7 +81,17 @@ class _LoginPageState extends State<LoginPage> {
                                   AppTextField(
                                     hintText: 'Password',
                                     controller: _passwordController,
-                                    keyboardType: TextInputType.visiblePassword,
+                                    obscureText: _obscurePassword,
+                                    validator: Validators.validatePassword,
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _obscurePassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: Colors.grey,
+                                      ),
+                                      onPressed: _togglePasswordVisibility,
+                                    ),
                                   ),
                                   const SizedBox(height: 10),
                                   Center(child:
