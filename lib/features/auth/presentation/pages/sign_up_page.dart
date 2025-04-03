@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -105,16 +106,20 @@ class _SignUpPageState extends State<SignUpPage> {
                             // 导航到登录页（如果有的话）
                           },
                           child: RichText(
-                            text: const TextSpan(
-                              style: TextStyle(color: Colors.white),
+                            text: TextSpan(
+                              style: const TextStyle(color: Colors.white),
                               children: [
-                                TextSpan(text: 'Already have an account? '),
+                                const TextSpan(text: 'Already have an account? '),
                                 TextSpan(
                                   text: 'Log In',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.underline,
                                   ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      context.go(AppConstants.loginRoute);
+                                    },
                                 ),
                               ],
                             ),

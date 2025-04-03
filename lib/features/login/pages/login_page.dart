@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tb_flutter/core/widgets/gradient_background.dart';
 
+import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/validators.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_logo.dart';
@@ -26,11 +28,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleForgotPassword(BuildContext context) {
-
+    context.go(AppConstants.forgotpasswordRoute);
   }
 
-  void _handleSignup() {
-    print("signUp taped!");
+  void _handleSignup(BuildContext context) {
+    context.go(AppConstants.signUpRoute);
   }
 
   @override
@@ -117,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                                         fontWeight: FontWeight.bold
                                       ),
                                       recognizer: TapGestureRecognizer()
-                                        ..onTap = _handleSignup
+                                        ..onTap = () => _handleSignup(context)
                                     )
                                   ]
                                 )
