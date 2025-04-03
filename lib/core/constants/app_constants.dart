@@ -7,6 +7,7 @@ class AppConstants {
   static const String passwordSetupRoute = '/password-setup';
   static const String registrationCompleteRoute = '/registration-complete';
   static const String homeRoute = '/home';
+  static const String loginRoute = '/login';
 
   // 验证相关
   static const int verificationCodeLength = 4;

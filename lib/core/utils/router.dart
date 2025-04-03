@@ -6,6 +6,8 @@ import 'package:tb_flutter/features/auth/presentation/pages/registration_complet
 import 'package:tb_flutter/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:tb_flutter/features/auth/presentation/pages/verification_page.dart';
 
+import '../../features/login/pages/login_page.dart';
+
 final appRouter = GoRouter(
   initialLocation: AppConstants.signUpRoute,
   routes: [
@@ -28,6 +30,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: AppConstants.homeRoute,
       builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: AppConstants.loginRoute,
+      builder: (context, state) => const LoginPage(),
     ),
   ],
 );
