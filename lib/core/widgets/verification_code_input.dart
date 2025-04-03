@@ -4,28 +4,34 @@ import 'package:tb_flutter/core/theme/app_theme.dart';
 
 class VerificationCodeInput extends StatefulWidget {
   final void Function(String) onCompleted;
+  final int length;
 
-  const VerificationCodeInput({super.key, required this.onCompleted});
+  const VerificationCodeInput({super.key,  required this.length, required this.onCompleted});
 
   @override
   State<VerificationCodeInput> createState() => _VerificationCodeInputState();
 }
 
 class _VerificationCodeInputState extends State<VerificationCodeInput> {
-  final List<TextEditingController> _controllers = [];
-  final List<FocusNode> _focusNodes = [];
-  final List<String> _codeDigits = List.filled(
-    AppConstants.verificationCodeLength,
-    '',
-  );
+  late List<TextEditingController> _controllers = [];
+  late List<FocusNode> _focusNodes = [];
+  late List<String> _codeDigits = [];
 
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < AppConstants.verificationCodeLength; i++) {
-      _controllers.add(TextEditingController());
-      _focusNodes.add(FocusNode());
-    }
+    _controllers = List.generate(
+      widget.length,
+          (index) => TextEditingController(),
+    );
+    _focusNodes = List.generate(
+      widget.length,
+          (index) => FocusNode(),
+    );
+    _codeDigits = List.filled(
+      widget.length,
+      '',
+    );
   }
 
   @override
@@ -41,7 +47,7 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
 
   void _onCodeDigitChanged(int index, String value) {
     if (value.isNotEmpty) {
-      if (index < AppConstants.verificationCodeLength - 1) {
+      if (index < widget.length - 1) {
         _focusNodes[index + 1].requestFocus();
       } else {
         _focusNodes[index].unfocus();
@@ -64,9 +70,9 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(
-        AppConstants.verificationCodeLength,
+        widget.length,
         (index) => SizedBox(
-          width: 60,
+          width: 50,
           child: TextField(
             controller: _controllers[index],
             focusNode: _focusNodes[index],
@@ -81,6 +87,8 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
               focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: AppTheme.primaryColor, width: 2),
               ),
+              filled: true,
+              fillColor: Colors.transparent,
             ),
             onChanged: (value) {
               if (value.isNotEmpty) {
