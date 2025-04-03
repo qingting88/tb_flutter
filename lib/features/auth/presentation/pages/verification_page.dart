@@ -73,6 +73,7 @@ class VerificationPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 40),
                               VerificationCodeInput(
+                                length: 4,
                                 onCompleted:
                                     (code) =>
                                         _handleVerification(context, code),

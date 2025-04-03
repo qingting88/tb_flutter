@@ -8,8 +8,7 @@ class AppConstants {
   static const String registrationCompleteRoute = '/registration-complete';
   static const String homeRoute = '/home';
   static const String loginRoute = '/login';
-  static const String forgotpasswordRoute = '/forgotpassword';
+  static const String forgotPasswordRoute = '/forgotpassword';
+  static const String forgotPasswordVerificationRoute = '/ForgotPasswordVerification';
 
-  // 验证相关
-  static const int verificationCodeLength = 4;
 }

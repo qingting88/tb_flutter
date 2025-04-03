@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleForgotPassword(BuildContext context) {
-    context.go(AppConstants.forgotpasswordRoute);
+    context.go(AppConstants.forgotPasswordRoute);
   }
 
   void _handleSignup(BuildContext context) {
@@ -40,6 +40,13 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _obscurePassword = !_obscurePassword;
     });
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _emailController.dispose();
+    super.dispose();
   }
 
   @override

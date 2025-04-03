@@ -6,6 +6,7 @@ import 'package:tb_flutter/features/auth/presentation/pages/registration_complet
 import 'package:tb_flutter/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:tb_flutter/features/auth/presentation/pages/verification_page.dart';
 import 'package:tb_flutter/features/login/pages/forgot_password_page.dart';
+import 'package:tb_flutter/features/login/pages/forgot_password_verification_page.dart';
 
 import '../../features/login/pages/login_page.dart';
 
@@ -37,8 +38,12 @@ final appRouter = GoRouter(
       builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
-      path: AppConstants.forgotpasswordRoute,
+      path: AppConstants.forgotPasswordRoute,
       builder: (context, state) => const ForgotPasswordPage(),
+    ),
+    GoRoute(
+      path: AppConstants.forgotPasswordVerificationRoute,
+      builder: (context, state) => const ForgotPasswordVerificationPage(),
     ),
   ],
 );

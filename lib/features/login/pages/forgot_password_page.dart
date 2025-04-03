@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tb_flutter/core/constants/app_constants.dart';
 
 import '../../../core/utils/validators.dart';
 import '../../../core/widgets/app_button.dart';
@@ -21,7 +23,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
   void _handleNext(BuildContext context) {
-    // todo
+    context.go(AppConstants.forgotPasswordVerificationRoute);
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
   }
 
   @override
