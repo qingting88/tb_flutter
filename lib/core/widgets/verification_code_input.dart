@@ -1,11 +1,19 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:tb_flutter/core/theme/app_theme.dart';
 
 class VerificationCodeInput extends StatefulWidget {
-  final void Function(String) onCompleted;
+  final void Function(String)? onCompleted;
+  final void Function(bool)? onEditing;
   final int length;
 
-  const VerificationCodeInput({super.key,  required this.length, required this.onCompleted});
+  const VerificationCodeInput({
+    super.key,
+    required this.length,
+    this.onCompleted,
+    this.onEditing,
+  });
 
   @override
   State<VerificationCodeInput> createState() => _VerificationCodeInputState();
@@ -21,11 +29,19 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
     super.initState();
     _controllers = List.generate(
       widget.length,
-          (index) => TextEditingController(),
+      (index) => TextEditingController(),
     );
     _focusNodes = List.generate(
       widget.length,
-          (index) => FocusNode(),
+      (index) {
+        final focusNode = FocusNode();
+        focusNode.addListener(() {
+          if (focusNode.hasFocus && widget.onEditing != null) {
+            widget.onEditing!(true);
+          }
+        });
+        return focusNode;
+      },
     );
     _codeDigits = List.filled(
       widget.length,
@@ -59,7 +75,7 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
       // 检查是否所有数字都已输入
       final allDigitsFilled = _codeDigits.every((digit) => digit.isNotEmpty);
       if (allDigitsFilled) {
-        widget.onCompleted(_codeDigits.join());
+        widget.onCompleted?.call(_codeDigits.join());
       }
     }
   }

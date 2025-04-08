@@ -17,11 +17,17 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
+  bool _isFormValid = false;
 
   void _handleNext(BuildContext context) {
-    context.push(AppConstants.forgotPasswordVerificationRoute);
+    setState(() {
+      _isFormValid = _formKey.currentState!.validate();
+    });
+    if (_isFormValid) {
+      context.push(AppConstants.forgotPasswordVerificationRoute);
+    }
   }
 
   @override
@@ -56,6 +62,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               borderRadius: BorderRadius.circular(40),
                             ),
                             child: Form(
+                              key: _formKey,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -66,11 +73,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     controller: _emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     validator: Validators.validateEmail,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isFormValid = _formKey.currentState?.validate() ?? false;
+                                      });
+                                    },
                                   ),
                                   const SizedBox(height: 10),
                                   AppButton(
                                     text: 'Next',
-                                    backgroundColor: Colors.grey,
+                                    backgroundColor: _isFormValid ? Colors.blue : Colors.grey, // 根据状态变量设置颜色
                                     onPressed: () => _handleNext(context),
                                   ),
                                 ],
