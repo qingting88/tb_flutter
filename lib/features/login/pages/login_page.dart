@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tb_flutter/core/utils/http.dart';
 import 'package:tb_flutter/core/widgets/gradient_background.dart';
+import 'package:tb_flutter/core/widgets/toast.dart';
+import 'package:tb_flutter/modules/user/api/login.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/validators.dart';
@@ -23,8 +26,16 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
-  void _handleLoginNext(BuildContext context) {
-
+  void _handleLoginNext(BuildContext context) async {
+    TaskResult<dynamic> result = await UserApi.useLoginMutation(
+      username: "username",
+      password: "password",
+    );
+    if (result.success) {
+      Toast.success(context, result.data.toString());
+    } else {
+      Toast.error(context, result.msg.toString());
+    }
   }
 
   void _handleForgotPassword(BuildContext context) {
@@ -61,7 +72,13 @@ class _LoginPageState extends State<LoginPage> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(minHeight: constraints.maxHeight),
                   child: IntrinsicHeight(
-                    child: Padding(padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(context).padding.bottom + 20),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        20,
+                        20,
+                        20,
+                        MediaQuery.of(context).padding.bottom + 20,
+                      ),
                       child: Column(
                         children: [
                           const SizedBox(height: 40),
@@ -77,7 +94,15 @@ class _LoginPageState extends State<LoginPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Center(child: Text('Login', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)),
+                                  const Center(
+                                    child: Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                   const SizedBox(height: 30),
                                   AppTextField(
                                     hintText: 'Email address',
@@ -102,24 +127,26 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ),
                                   const SizedBox(height: 10),
-                                  Center(child:
-                                    TextButton(
-                                      onPressed: () => _handleForgotPassword(context),
+                                  Center(
+                                    child: TextButton(
+                                      onPressed:
+                                          () => _handleForgotPassword(context),
                                       child: Text.rich(
-                                          TextSpan(
-                                              text: 'Forgot password?',
-                                              style: TextStyle(
-                                                  color: Colors.blue,
-                                                  decoration: TextDecoration.underline,
-                                                  decorationColor: Colors.blue)
-                                          )
-                                      )
+                                        TextSpan(
+                                          text: 'Forgot password?',
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            decoration:
+                                                TextDecoration.underline,
+                                            decorationColor: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 10),
                                   AppButton(
-                                    text: 'Next',
-                                    backgroundColor: Colors.grey,
+                                    text: 'Next11',
                                     onPressed: () => _handleLoginNext(context),
                                   ),
                                 ],
@@ -129,25 +156,27 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 20),
                           Center(
                             child: RichText(
-                                text: TextSpan(
-                                  text: "Doesn't have an account yet? ",
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16
+                              text: TextSpan(
+                                text: "Doesn't have an account yet? ",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Sign Up',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    recognizer:
+                                        TapGestureRecognizer()
+                                          ..onTap =
+                                              () => _handleSignup(context),
                                   ),
-                                  children: [
-                                    TextSpan(
-                                      text: 'Sign Up',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () => _handleSignup(context)
-                                    )
-                                  ]
-                                )
+                                ],
+                              ),
                             ),
                           ),
                         ],

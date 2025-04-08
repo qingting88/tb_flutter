@@ -42,3 +42,5 @@ lib/
 2. Clone the project
 3. Run `flutter pub get` to install dependencies
 4. Run `flutter run` to start the application
+
+flutter pub run json_model src=lib/modules/user/json  dist=lib/modules/user/model 

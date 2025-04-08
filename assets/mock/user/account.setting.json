@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "code": "120001",
+  "message": "user action need verify",
+  "data": [
+    {
+      "verify_uuid": "d25857e0-f7d9-4d96-84fe-59885397ab26",
+      "secure": {
+        "secure_setting": {
+          "two_factor": true,
+          "email_verify": true,
+          "phone_verify": false
+        },
+        "user_email": "qi***@flashwire.com",
+        "phone_country_code": "+1",
+        "phone_number": "408****2895"
+      }
+    }
+  ]
+}

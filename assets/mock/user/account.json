@@ -1,0 +1,25 @@
+{
+  "status": "success",
+  "code": "100000",
+  "message": "success",
+  "data": [
+    {
+      "user": {
+        "name": "Yao i Ji",
+        "email": "ji***@gmail.com",
+        "status": "active",
+        "kyc_status": "Verified",
+        "last_login_at": "2024-06-24 03:20:20",
+        "phone_country_code": "",
+        "phone_number": "",
+        "extend": {
+          "secure_setting": {
+            "two_factor": false,
+            "email_verify": true,
+            "phone_verify": false
+          }
+        }
+      }
+    }
+  ]
+}
