@@ -50,6 +50,7 @@ class _PasswordSetupPageState extends State<PasswordSetupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
       body: GradientBackground(
         child: LayoutBuilder(
