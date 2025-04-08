@@ -41,7 +41,6 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
       body: GradientBackground(
         child: LayoutBuilder(
@@ -110,20 +109,17 @@ class _SignUpPageState extends State<SignUpPage> {
                             text: TextSpan(
                               style: const TextStyle(color: Colors.white),
                               children: [
-                                const TextSpan(
-                                  text: 'Already have an account? ',
-                                ),
+                                const TextSpan(text: 'Already have an account? '),
                                 TextSpan(
                                   text: 'Log In',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.underline,
                                   ),
-                                  recognizer:
-                                      TapGestureRecognizer()
-                                        ..onTap = () {
-                                          context.go(AppConstants.loginRoute);
-                                        },
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      context.go(AppConstants.loginRoute);
+                                    },
                                 ),
                               ],
                             ),
