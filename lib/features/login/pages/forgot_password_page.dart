@@ -21,7 +21,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
   void _handleNext(BuildContext context) {
-    context.go(AppConstants.forgotPasswordVerificationRoute);
+    context.push(AppConstants.forgotPasswordVerificationRoute);
   }
 
   @override
