@@ -29,7 +29,6 @@ class VerificationPage extends StatelessWidget {
     final email = authState.email ?? '';
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
       body: GradientBackground(
         child: LayoutBuilder(

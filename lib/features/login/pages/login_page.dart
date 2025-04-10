@@ -22,24 +22,30 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   void _handleLoginNext(BuildContext context) async {
-    TaskResult<dynamic> result = await UserApi.useLoginMutation(
-      username: "username",
-      password: "password",
-    );
-    if (result.success) {
-      Toast.success(context, result.toString());
-    } else {
-      Toast.error(context, result.msg.toString());
+    if (_formKey.currentState!.validate()) {
+      final username = _emailController.text;
+      final password = _passwordController.text;
+      TaskResult<dynamic> result = await UserApi.useLoginMutation(
+        username: username,
+        password: password,
+      );
+      if (result.success) {
+        Toast.success(context, result.data.toString());
+        context.go(AppConstants.homeRoute);
+      } else {
+        Toast.error(context, result.msg.toString());
+      }
     }
   }
 
   void _handleForgotPassword(BuildContext context) {
-    context.go(AppConstants.forgotPasswordRoute);
+    context.push(AppConstants.forgotPasswordRoute);
   }
 
   void _handleSignup(BuildContext context) {
@@ -91,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Form(
+                              key: _formKey,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -146,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   const SizedBox(height: 10),
                                   AppButton(
-                                    text: 'Next11',
+                                    text: 'Next',
                                     onPressed: () => _handleLoginNext(context),
                                   ),
                                 ],
