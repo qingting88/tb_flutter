@@ -1,6 +1,6 @@
-import 'package:tb_flutter/core/utils/http.dart';
-
+import '../../http/index.dart';
 import '../model/phone.dart';
+import '../model/secure.dart';
 import '../model/user.dart';
 
 
@@ -51,7 +51,7 @@ class UserApi {
 
   // 获取用户基本信息
   static useUserInfoQuery() async {
-    return await fetchByGet<List<UserInfo>>("/user/account", {});
+    return await fetchByGet<List<IUserInfoWrapper>>("/user/account", {});
   }
 
   // 安全验证发送email
@@ -69,7 +69,7 @@ class UserApi {
 
   // 验证2fa
   static use2faVerifyMutation({
-    required SecureSetting secure_verify,
+    required ISecureSetting secure_verify,
     String? verify_uuid,
   }) async {
     return fetchByPost("/user/secure/verify", {secure_verify, verify_uuid});
@@ -86,7 +86,7 @@ class UserApi {
   }
 
   // 设置2fa
-  static useSetting2FAMutation({required SecureSetting secure_setting}) async {
+  static useSetting2FAMutation({required ISecureSetting secure_setting}) async {
     return fetchByPost<List<I2FAQuery>>("/user/account/setting", {
       secure_setting,
     });

@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/utils/http.dart';
 import 'package:tb_flutter/core/widgets/gradient_background.dart';
 import 'package:tb_flutter/core/widgets/toast.dart';
-import 'package:tb_flutter/modules/user/api/login.dart';
+import 'package:tb_flutter/modules/http/task_result.dart';
+import 'package:tb_flutter/modules/user/api/user.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/validators.dart';
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       password: "password",
     );
     if (result.success) {
-      Toast.success(context, result.data.toString());
+      Toast.success(context, result.toString());
     } else {
       Toast.error(context, result.msg.toString());
     }
