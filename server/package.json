@@ -1,0 +1,25 @@
+{
+  "name": "serve",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^5.0.1",
+    "@types/mockjs": "^1.0.10",
+    "express": "^5.1.0",
+    "glob": "^11.0.2",
+    "mockjs": "^1.1.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.12",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.8.1"
+  }
+}

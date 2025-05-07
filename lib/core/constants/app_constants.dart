@@ -2,6 +2,7 @@ class AppConstants {
   static const String appName = 'TreasureBox';
 
   // 路由名称
+  static const String splashRoute = '/splash';
   static const String signUpRoute = '/signup';
   static const String verificationRoute = '/verification';
   static const String passwordSetupRoute = '/password-setup';

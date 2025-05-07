@@ -1,0 +1,14 @@
+import { defineEventHandler } from "../../util";
+
+export default defineEventHandler(() => {
+  return {
+    status: "success",
+    code: "120000",
+    message: "success",
+    data: [
+      {
+        token: "6|WvaPNFfgn2T6GFHwhsJw9YOSbp99bk98eY52a0nQa717008c",
+      },
+    ],
+  };
+});
