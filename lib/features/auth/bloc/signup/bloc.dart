@@ -13,6 +13,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
        super(SignUpInitial()) {
     on<SignUpEmailEvent>(_onSignUpEmail);
     on<SignUpValidEmailEvent>(_onSignUpValidEmail);
+    on<SignUpPasswordEvent>(_onPasswordUpgrade);
   }
 
   final AuthRepository _authRepository;
@@ -26,7 +27,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     if (isEmail) {
       emit(SignUpSuccess());
     } else {
-      emit(SignUpFailure('SignUp接口 token 不存在'));
+      emit(SignUpFailure('_onSignUpEmail接口 isEmail 不存在'));
     }
   }
 
@@ -35,14 +36,30 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     Emitter<SignUpState> emit,
   ) async {
     emit(SignUpLoading());
-    final token = await _authRepository.useRegisterVerifyMutation(
+    final isSignUp = await _authRepository.useRegisterVerifyMutation(
       email: event.email,
       code: event.code,
     );
-    if (token?.isNotEmpty ?? false) {
+    if (isSignUp) {
+      await _authCubit.authCheckRequested();
       emit(SignUpSuccess());
     } else {
-      emit(SignUpFailure('SignUp接口 token 不存在'));
+      emit(SignUpFailure('_onSignUpValidEmail接口 token 不存在'));
+    }
+  }
+
+  void _onPasswordUpgrade(
+    SignUpPasswordEvent event,
+    Emitter<SignUpState> emit,
+  ) async {
+    emit(SignUpLoading());
+    final isOk = await _authRepository.usePasswordUpgradeMutation(
+      password: event.password,
+    );
+    if (isOk) {
+      emit(SignUpSuccess());
+    } else {
+      emit(SignUpFailure('_onPasswordUpgrade 接口 isOk 不存在'));
     }
   }
 }

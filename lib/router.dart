@@ -16,6 +16,8 @@ import 'package:tb_flutter/features/auth/page/sign_up_page.dart';
 import 'package:tb_flutter/features/auth/page/splash_page.dart';
 import 'package:tb_flutter/features/auth/page/verification_page.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class AppRouter {
   final AuthCubit _authCubit;
 
@@ -24,6 +26,7 @@ class AppRouter {
   }
 
   GoRouter get config => GoRouter(
+    navigatorKey: navigatorKey,
     refreshListenable: GoRouterRefreshStream(_authCubit.stream),
     initialLocation: AppConstants.splashRoute,
     routes: [

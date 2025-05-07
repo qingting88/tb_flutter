@@ -19,12 +19,13 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   void _onSignInLogin(LoginSignInEvent event, Emitter<SignInState> emit) async {
     emit(SignInLoading());
-    final token = await _authRepository.useLoginMutation(
+    final isLoggedIn = await _authRepository.useLoginMutation(
       username: event.username,
       password: event.password,
     );
-    if (token?.isNotEmpty ?? false) {
-      await _authCubit.updateToken(token!);
+    if (isLoggedIn) {
+      print("isLoggedIn");
+      await _authCubit.authCheckRequested();
       emit(SignInSuccess());
     } else {
       emit(SignInFailure('Login接口 token 不存在'));

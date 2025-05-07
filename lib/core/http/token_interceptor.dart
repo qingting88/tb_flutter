@@ -24,6 +24,9 @@ class TokenInterceptor extends Interceptor {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
 
+    print('打印请求体');
+    print(options.data); // 打印请求体
+
     return handler.next(options);
   }
 

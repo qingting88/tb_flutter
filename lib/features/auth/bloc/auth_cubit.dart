@@ -14,11 +14,11 @@ class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;
   final TokenStorage _tokenStorage;
 
-  Future<void> updateToken(String? token) async {
-    if (token == null) {
-      emit(AuthUnauthenticatedState('token 不存在'));
-    } else {
-      await _tokenStorage.saveTokens(token);
+
+  Future<void> authCheckRequested() async {
+    final token = await _tokenStorage.getAccessToken();
+    print('token: $token');
+    if (token != null) {
       emit(AuthLoading());
       final user = await _authRepository.useUserInfoQuery();
       emit(
@@ -26,13 +26,9 @@ class AuthCubit extends Cubit<AuthState> {
             ? AuthenticatedState(user)
             : AuthUnauthenticatedState('user 不存在'),
       );
+    } else {
+      emit(AuthUnauthenticatedState('token 不存在'));
     }
-  }
-
-  Future<void> authCheckRequested() async {
-    final token = await _tokenStorage.getAccessToken();
-    print('token $token');
-    return updateToken(token);
   }
 
   void clean() {

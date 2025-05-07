@@ -7,80 +7,98 @@ enum STATUS {
   const STATUS(this.value);
 }
 
-enum SUCCESS_CODE {
-  success("100000"),
-  userEmailVerificationCodeExist("110001"),
-  logout("110002"),
-  upgradeToken("120000"),
-  userActionNeedVerify("120001");
-
-  final String value;
-
-  const SUCCESS_CODE(this.value);
+class SUCCESS_CODE {
+  static const String SUCCESS = "100000";
+  static const String USER_EMAIL_VERIFICATION_CODE_EXIST = "110001";
+  static const String LOGOUT = "110002";
+  static const String UPGRADE_TOKEN = "120000";
+  static const String USER_ACTION_NEED_VERIFY = "120001";
 }
 
-enum SERVER_ERROR_CODE {
-  defaultError("900000"),
-  userLoginFail("910001"),
-  userRegisterFail("910002"),
-  twoFactorGenerateKeyFail("910003"),
-  twoFactorEnableFail("910004"),
-  changePasswordFail("910005"),
-  verifyEventActionInvalid("910006"),
-  createVerificationCodeFailed("910007"),
-  twoFactorSaveKeyFail("910008"),
-  twoFactorVerifyFail("910009");
 
-  final String value;
-
-  const SERVER_ERROR_CODE(this.value);
+class SERVER_ERROR_CODE {
+  static const String DEFAULT = "900000";
+  static const String USER_LOGIN_FAIL = "910001";
+  static const String USER_REGISTER_FAIL = "910002";
+  static const String TWO_FACTOR_GENERATE_KEY_FAIL = "910003";
+  static const String TWO_FACTOR_ENABLE_FAIL = "910004";
+  static const String CHANGE_PASSWORD_FAIL = "910005";
+  static const String VERIFY_EVENT_ACTION_INVALID = "910006";
+  static const String CREATE_VERIFICATION_CODE_FAILED = "910007";
+  static const String TWO_FACTOR_SAVE_KEY_FAIL = "910008";
+  static const String TWO_FACTOR_VERIFY_FAIL = "910009";
 }
 
-enum CLIENT_ERROR_CODE {
-  defaultError("200001"),
-  requestLimit("200003"),
-  unauthenticated("210001"),
-  systemForbiddenRegion("210002"), // 服务不可用
-  sendCodeFail("210003"),
-  resendCodeFail("210004"),
-  sendCodeTimeLimit("210005"),
-  sendCodeCountLimit("210006"),
-  verifyTwoFactorCodeFail("210007"),
-  twoFactorAlreadyEnable("210008"),
-  noTwoFactorSecret("210009"),
-  verificationEventInvalid("210010"),
-  secureGoogleAuthenticatorNeedVerify("210011"),
-  secureEmailNeedVerify("210012"),
-  securePhoneNeedVerify("210013"),
-  secureGoogleAuthenticatorVerifyFail("210014"),
-  secureEmailVerifyFail("210015"),
-  codeVerifyFailForExpire("210017"),
-  codeVerifyFailNotExist("210018"),
-  securePhoneVerifyFail("210016"),
-  phoneCodeVerifyFailForExpire("210020"),
-  phoneCodeVerifyFailNotExist("210021"),
-  unauthenticatedByDeviceChange("210019"),
-  emailVerifyCodeError("220001"),
-  userEmailExist("230001"),
-  userLoginFail("230002"),
-  userLoginCredentialsIncorrect("230003"),
-  userNotSupportInstitution("230004"), // 用户不支持机构
-  userStatusNoAccess("230005"),
-  userEmailNotExist("230006"),
-  userLoginFailLocked("230007"),
-  userExtendError("230008"),
-  atLeastOpenOneSecureSetting("230009"),
-  accountSettingSaveFailed("230010"),
-  google2faUnset("230011"),
-  phone2faUnset("230016");
+class CLIENT_ERROR_CODE {
+  static const String DEFAULT = "200001";
 
-  final String value;
+  static const String REQUEST_LIMIT = "200003";
 
-  const CLIENT_ERROR_CODE(this.value);
+  static const String UNAUTHENTICATED = "210001";
+
+  static const String SYSTEM_FORBIDDEN_REGION = "210002"; // 服务不可用
+
+  static const String SEND_CODE_FAIL = "210003";
+
+  static const String RESEND_CODE_FAIL = "210004";
+
+  static const String SEND_CODE_TIME_LIMIT = "210005";
+
+  static const String SEND_CODE_COUNT_LIMIT = "210006";
+
+  static const String VERIFY_TWO_FACTOR_CODE_FAIL = "210007";
+
+  static const String TWO_FACTOR_ALREADY_ENABLE = "210008";
+
+  static const String NO_TWO_FACTOR_SECRET = "210009";
+
+  static const String VERIFICATION_EVENT_INVALID = "210010";
+
+  static const String SECURE_GOOGLE_AUTHENTICATOR_NEED_VERIFY = "210011";
+
+  static const String SECURE_EMAIL_NEED_VERIFY = "210012";
+
+  static const String SECURE_PHONE_NEED_VERIFY = "210013";
+
+  static const String SECURE_GOOGLE_AUTHENTICATOR_VERIFY_FAIL = "210014";
+
+  static const String SECURE_EMAIL_VERIFY_FAIL = "210015";
+  static const String CODE_VERIFY_FAIL_FOR_EXPIRE = "210017";
+  static const String CODE_VERIFY_FAIL_NOT_EXIST = "210018";
+
+  static const String SECURE_PHONE_VERIFY_FAIL = "210016";
+  static const String PHONE_CODE_VERIFY_FAIL_FOR_EXPIRE = "210020";
+  static const String PHONE_CODE_VERIFY_FAIL_NOT_EXIST = "210021";
+
+  static const String UNAUTHENTICATED_BY_DEVICE_CHANGE = "210019";
+
+  static const String EMAIL_VERIFY_CODE_ERROR = "220001";
+
+  static const String USER_EMAIL_EXIST = "230001";
+
+  static const String USER_LOGIN_FAIL = "230002";
+
+  static const String USER_LOGIN_CREDENTIALS_INCORRECT = "230003";
+  // 用户不支持机构
+  static const String USER_NOT_SUPPORT_INSTITUTION = "230004";
+
+  static const String USER_STATUS_NO_ACCESS = "230005";
+
+  static const String USER_EMAIL_NOT_EXIST = "230006";
+
+  static const String USER_LOGIN_FAIL_LOCKED = "230007";
+
+  static const String USER_EXTEND_ERROR = "230008";
+
+  static const String AT_LEAST_OPEN_ONE_SECURE_SETTING = "230009";
+
+  static const String ACCOUNT_SETTING_SAVE_FAILED = "230010";
+  static const String GOOGLE_2FA_UNSET = "230011";
+  static const String PHONE_2FA_UNSET = "230016";
 }
 
 class ErrorT {
-  final dynamic code; // CLIENT_ERROR_CODE or SERVER_ERROR_CODE
+  final String code; // CLIENT_ERROR_CODE or SERVER_ERROR_CODE
   final String message;
   final String status; // 'success' or 'error'
   final List<Map<String, dynamic>> errors;
@@ -113,7 +131,7 @@ class ErrorT {
 
 class DataT<T> {
   final List<T> data;
-  final SUCCESS_CODE code;
+  final String code;
   final String message;
   final String status; // 'success' or 'error'
 
@@ -133,7 +151,7 @@ class DataT<T> {
           (json['data'] as List<dynamic>)
               .map((e) => fromJsonT != null ? fromJsonT(e) : e as T)
               .toList(),
-      code: SUCCESS_CODE.values.firstWhere((e) => e.value == json['code']),
+      code: json['code'],
       message: json['message'],
       status: json['status'],
     );

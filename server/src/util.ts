@@ -1,6 +1,6 @@
 export const defineEventHandler=(handle:(req?:any)=>Record<string,any>)=>{
-    return (event: any) => {
-        const result = handle();
+    return (req: any) => {
+        const result = handle(req);
         return result;
     }
 }

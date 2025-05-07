@@ -9,6 +9,7 @@ import 'package:tb_flutter/core/widgets/app_logo.dart';
 import 'package:tb_flutter/core/widgets/app_text_field.dart';
 import 'package:tb_flutter/core/widgets/gradient_background.dart';
 import 'package:tb_flutter/features/auth/bloc/signup/bloc.dart';
+import 'package:tb_flutter/features/auth/bloc/signup/event.dart';
 import 'package:tb_flutter/features/auth/bloc/signup/state.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -34,8 +35,8 @@ class _SignUpPageState extends State<SignUpPage> {
       // final authState = Provider.of<AuthState>(context, listen: false);
       // authState.setEmail(_emailController.text);
 
-      // 导航到验证码页面
-      context.go(AppConstants.verificationRoute);
+      final email = _emailController.text;
+      context.read<SignUpBloc>().add(SignUpEmailEvent(email: email));
     }
   }
 
