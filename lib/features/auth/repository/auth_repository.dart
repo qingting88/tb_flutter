@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:tb_flutter/core/http/http_model.dart';
-import 'package:tb_flutter/core/models/user.dart';
+import 'package:tb_flutter/features/auth/model/auth.dart';
+import 'package:tb_flutter/features/settings/model/user.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -14,7 +15,7 @@ class AuthRepository {
   // 注册，第一步 注册邮箱
   Future<bool> useRegisterMutation({required String email}) async {
     final response = await _dio.post("/user/register", data: {"email": email});
-    final result = DataT<dynamic>.fromJson(response.data);
+    final result = DataT<IAuth>.fromJson(response.data);
     if (result.code == SUCCESS_CODE.SUCCESS) {
       return true;
     }
@@ -61,12 +62,12 @@ class AuthRepository {
       "/user/login",
       data: {"username": username, "password": password},
     );
-    final result = DataT<Map<String, String>>.fromJson(
+    final result = DataT<IAuth>.fromJson(
       response.data,
-      (data) => ({"token": data['token'] as String}),
+      (data) => IAuth.fromJson(data),
     );
-    print("result.code = ${result.code}");
     if (result.status == STATUS.success.value) {
+      print("result.code = ${result.data[0].token}");
       return true;
     }
     return false;
@@ -76,7 +77,10 @@ class AuthRepository {
     final response = await _dio.get("/user/account", data: {});
     final result = DataT<IUserInfo>.fromJson(
       response.data,
-      (data) => IUserInfo.fromJson(data['user'] as Map<String, dynamic>),
+      (data){
+        print("data = $data");
+        return IUserInfo.fromJson(data['user']);
+      },
     );
     return result.data[0];
   }

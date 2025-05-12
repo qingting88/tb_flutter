@@ -22,11 +22,14 @@ lib/
     widgets/         # Common widgets
   features/          # Feature modules
     auth/            # Authentication feature
-      data/          # Data layer
-      domain/        # Domain layer
-      presentation/  # Presentation layer
+      bloc/          # Bloc
+      model/         # Model
+      page/          # Page
+      repository/    # Repository
+      widget/        # Widget
   l10n/              # Internationalization
   main.dart          # Application entry point
+  router.dart        # Router configuration
 ```
 
 ## Tech Stack
@@ -43,4 +46,5 @@ lib/
 3. Run `flutter pub get` to install dependencies
 4. Run `flutter run` to start the application
 
-flutter pub run json_model src=lib/modules/user/json  dist=lib/modules/user/model 
+## Build Model
+dart run build_runner build

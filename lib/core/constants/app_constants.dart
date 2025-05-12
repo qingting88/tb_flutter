@@ -12,4 +12,6 @@ class AppConstants {
   static const String forgotPasswordRoute = '/forgotpassword';
   static const String forgotPasswordVerificationRoute = '/ForgotPasswordVerification';
 
+  static const String settingsProfileRoute = '/settings/profile';
+
 }

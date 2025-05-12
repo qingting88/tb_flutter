@@ -14,6 +14,12 @@ class DialogButton {
   DialogButton({required this.text, this.onClick});
 }
 
+class ServerException implements Exception {
+  final String message;
+  const ServerException(this.message);
+}
+
+
 // 拦截返回数据，进行统一处理
 class ResponseInterceptors<T> extends Interceptor {
   final TokenStorage _tokenStorage;
@@ -121,15 +127,8 @@ class ResponseInterceptors<T> extends Interceptor {
           _showDialog(content: error.message);
           break;
       }
+      throw ServerException(error.message);
 
-      throw DioException(
-        requestOptions: response.requestOptions,
-        response: Response(
-          requestOptions: response.requestOptions,
-          data: error,
-        ),
-        error: error.message,
-      );
     } else if (json['status'] == "success") {
       final data = DataT.fromJson(json);
       switch (data.code) {
@@ -166,7 +165,6 @@ class ResponseInterceptors<T> extends Interceptor {
           );
           break;
       }
-      print("zhixing");
       handler.next(response);
     }
   }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:tb_flutter/core/http/http_model.dart';
 import 'package:tb_flutter/core/http/response_interceptor.dart';
 import 'package:tb_flutter/core/http/token_interceptor.dart';
 import 'package:tb_flutter/core/http/token_storage.dart';
@@ -21,4 +22,9 @@ class HttpService {
   }
   // 获取Dio实例
   Dio get dio => _dio;
+
+  // Future<T> get<T>(String path, {Object? data}) async {
+  //   final response = await _dio.get(path, data: data);
+  //   final result= DataT<T>.fromJson(response.data);
+  // }
 }

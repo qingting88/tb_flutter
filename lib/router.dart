@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tb_flutter/core/constants/app_constants.dart';
 import 'package:tb_flutter/core/layouts/main.dart';
+import 'package:tb_flutter/core/layouts/secondary.dart';
 import 'package:tb_flutter/features/auth/bloc/auth_cubit.dart';
 import 'package:tb_flutter/features/auth/bloc/auth_state.dart';
 import 'package:tb_flutter/features/auth/page/forgot_password_page.dart';
@@ -15,6 +16,7 @@ import 'package:tb_flutter/features/auth/page/registration_complete_page.dart';
 import 'package:tb_flutter/features/auth/page/sign_up_page.dart';
 import 'package:tb_flutter/features/auth/page/splash_page.dart';
 import 'package:tb_flutter/features/auth/page/verification_page.dart';
+import 'package:tb_flutter/features/settings/page/profile_page.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -68,6 +70,15 @@ class AppRouter {
           GoRoute(
             path: AppConstants.homeRoute,
             builder: (context, state) => const HomePage(),
+          ),
+        ],
+      ),
+      ShellRoute(
+        builder: (context, state, child) => SecondaryLayout(child: child),
+        routes: [
+          GoRoute(
+            path: AppConstants.settingsProfileRoute,
+            builder: (context, state) => const ProfilePage(),
           ),
         ],
       ),
