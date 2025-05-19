@@ -55,8 +55,8 @@ class RegistrationCompletePage extends StatelessWidget {
                       onPressed: () {
                         context.go(AppConstants.homeRoute);
                       },
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      // backgroundColor: Colors.white,
+                      // padding: const EdgeInsets.symmetric(vertical: 20),
                     ),
                   ],
                 ),

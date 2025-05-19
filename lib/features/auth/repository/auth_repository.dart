@@ -5,7 +5,6 @@ import 'package:tb_flutter/core/http/http_model.dart';
 import 'package:tb_flutter/features/auth/model/auth.dart';
 import 'package:tb_flutter/features/settings/model/user.dart';
 
-enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthRepository {
   final Dio _dio;

@@ -16,7 +16,13 @@ import 'package:tb_flutter/features/auth/page/registration_complete_page.dart';
 import 'package:tb_flutter/features/auth/page/sign_up_page.dart';
 import 'package:tb_flutter/features/auth/page/splash_page.dart';
 import 'package:tb_flutter/features/auth/page/verification_page.dart';
+import 'package:tb_flutter/features/settings/page/google/step1_page.dart';
+import 'package:tb_flutter/features/settings/page/google/step2_page.dart';
+import 'package:tb_flutter/features/settings/page/google/step3_page.dart';
+import 'package:tb_flutter/features/settings/page/google/step4_page.dart';
 import 'package:tb_flutter/features/settings/page/profile_page.dart';
+import 'package:tb_flutter/features/settings/page/security_settings_page.dart';
+import 'package:tb_flutter/features/settings/page/twofa_page.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -80,6 +86,30 @@ class AppRouter {
             path: AppConstants.settingsProfileRoute,
             builder: (context, state) => const ProfilePage(),
           ),
+          GoRoute(
+            path: AppConstants.settingsSecurityRoute,
+            builder: (context, state) => const SecuritySettingsPage(),
+          ),
+          GoRoute(
+            path: AppConstants.settingsGoogleStep1Route,
+            builder: (context, state) => const GoogleStep1Page(),
+          ),
+          GoRoute(
+            path: AppConstants.settingsGoogleStep2Route,
+            builder: (context, state) => const GoogleStep2Page(),
+          ),
+          GoRoute(
+            path: AppConstants.settingsGoogleStep3Route,
+            builder: (context, state) => const GoogleStep3Page(),
+          ),
+          GoRoute(
+            path: AppConstants.settingsGoogleStep4Route,
+            builder: (context, state) => const GoogleStep4Page(),
+          ),
+          GoRoute(
+            path: AppConstants.settings2faRoute,
+            builder: (context, state) => const TwofaPage(),
+          ),
         ],
       ),
     ],
@@ -108,16 +138,18 @@ class AppRouter {
         "登陆状态 $isLoggedIn 当前路径 ${state.fullPath} authState: ${authState.toString()} isUnauthenticatedPath: $isUnauthenticatedPath",
       );
 
+      final home = AppConstants.homeRoute;
+
       // 如果正在加载中，不进行重定向
       if (authState is AuthLoading) return null;
 
       if (isSplash) {
-        return isLoggedIn ? '/home' : '/login';
+        return isLoggedIn ? home : '/login';
       }
 
       // 已登录用户访问登录/注册页 → 首页
       if (isLoggedIn && isUnauthenticatedPath) {
-        return '/home';
+        return home;
       }
 
       // 未登录用户访问需要认证的页 → 登录页（携带原始目标）

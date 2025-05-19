@@ -8,6 +8,7 @@ import 'package:tb_flutter/features/auth/bloc/auth_cubit.dart';
 import 'package:tb_flutter/features/auth/bloc/signin/bloc.dart';
 import 'package:tb_flutter/features/auth/bloc/signup/bloc.dart';
 import 'package:tb_flutter/features/auth/repository/auth_repository.dart';
+import 'package:tb_flutter/features/settings/repository/user_repository.dart';
 import 'package:tb_flutter/router.dart';
 
 // void main() {
@@ -44,12 +45,16 @@ void main() async {
   final tokenStorage = SecureTokenStorage();
   final httpService = HttpService(tokenStorage: tokenStorage);
   final AuthRepository authRepository = AuthRepository(httpService.dio);
+  final UserRepository userRepository = UserRepository(httpService.dio);
 
   tokenStorage.clearTokens();
 
   runApp(
     MultiRepositoryProvider(
-      providers: [RepositoryProvider.value(value: authRepository)],
+      providers: [
+        RepositoryProvider.value(value: authRepository),
+        RepositoryProvider.value(value: userRepository),
+      ],
       child: BlocProvider(
         create:
             (context) => AuthCubit(

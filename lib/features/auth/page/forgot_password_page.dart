@@ -82,7 +82,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   const SizedBox(height: 10),
                                   AppButton(
                                     text: 'Next',
-                                    backgroundColor: _isFormValid ? Colors.blue : Colors.grey, // 根据状态变量设置颜色
+                                    disabled: !_isFormValid,
+                                    // backgroundColor: _isFormValid ? Colors.blue : Colors.grey, // 根据状态变量设置颜色
                                     onPressed: () => _handleNext(context),
                                   ),
                                 ],

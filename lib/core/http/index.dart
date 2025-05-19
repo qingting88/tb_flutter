@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:tb_flutter/core/http/http_model.dart';
 import 'package:tb_flutter/core/http/response_interceptor.dart';
 import 'package:tb_flutter/core/http/token_interceptor.dart';
 import 'package:tb_flutter/core/http/token_storage.dart';

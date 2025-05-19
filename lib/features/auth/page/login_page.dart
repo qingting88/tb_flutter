@@ -148,6 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 decoration:
                                                     TextDecoration.underline,
                                                 decorationColor: Colors.blue,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),

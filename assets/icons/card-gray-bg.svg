@@ -1,0 +1,26 @@
+<svg width="355" height="280" viewBox="0 0 355 280" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient x1="-13.554%" y1="8.694%" x2="100%" y2="76.561%" id="cd0staqxnb">
+            <stop stop-color="#EBEBEB" offset="0%"/>
+            <stop stop-color="gray" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="-10.521%" y1="27.448%" x2="102.72%" y2="68.795%" id="ct1pzilp1a">
+            <stop stop-color="#F4F4F4" offset="0%"/>
+            <stop stop-color="#7A7A7A" offset="100%"/>
+        </linearGradient>
+        <filter x="-10%" y="-333%" width="120%" height="766%" filterUnits="objectBoundingBox" id="77pevalyqc">
+            <feGaussianBlur stdDeviation="9.833" in="SourceGraphic"/>
+        </filter>
+    </defs>
+    <g transform="translate(30)" fill="none" fill-rule="evenodd">
+        <rect stroke="url(#ct1pzilp1a)" stroke-width="1.967" fill="url(#cd0staqxnb)" x=".983" y=".983" width="292.033" height="171.033" rx="20.65"/>
+        <g transform="translate(.017 40.354)" fill="#5C5C5C" opacity=".217">
+            <path d="M0 0h294v38.386H0z"/>
+            <rect x="19.65" y="68.898" width="124.883" height="12.079" rx="2.95"/>
+            <rect x="230.083" y="68.898" width="44.25" height="44.291" rx="2.95"/>
+            <rect x="19.65" y="85.004" width="42.283" height="12.079" rx="2.95"/>
+            <rect x="19.65" y="101.11" width="76.7" height="12.079" rx="2.95"/>
+        </g>
+        <ellipse fill="#D8D8D8" filter="url(#77pevalyqc)" cx="147.5" cy="245.571" rx="147.5" ry="4.429"/>
+    </g>
+</svg>
