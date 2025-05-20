@@ -20,9 +20,11 @@ import 'package:tb_flutter/features/settings/page/google/step1_page.dart';
 import 'package:tb_flutter/features/settings/page/google/step2_page.dart';
 import 'package:tb_flutter/features/settings/page/google/step3_page.dart';
 import 'package:tb_flutter/features/settings/page/google/step4_page.dart';
+import 'package:tb_flutter/features/settings/page/password/new_page.dart';
+import 'package:tb_flutter/features/settings/page/password/old_page.dart';
 import 'package:tb_flutter/features/settings/page/profile_page.dart';
 import 'package:tb_flutter/features/settings/page/security_settings_page.dart';
-import 'package:tb_flutter/features/settings/page/twofa_page.dart';
+import 'package:tb_flutter/features/settings/page/two_fa_page.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -110,6 +112,14 @@ class AppRouter {
             path: AppConstants.settings2faRoute,
             builder: (context, state) => const TwofaPage(),
           ),
+          GoRoute(
+            path: AppConstants.settingsPasswordRoute,
+            builder: (context, state) => const PasswordPage(),
+          ),
+          GoRoute(
+            path: AppConstants.settingsPasswordNewRoute,
+            builder: (context, state) => const PasswordNewPage(),
+          ),
         ],
       ),
     ],
@@ -138,7 +148,7 @@ class AppRouter {
         "登陆状态 $isLoggedIn 当前路径 ${state.fullPath} authState: ${authState.toString()} isUnauthenticatedPath: $isUnauthenticatedPath",
       );
 
-      final home = AppConstants.homeRoute;
+      final home = AppConstants.loginRoute;
 
       // 如果正在加载中，不进行重定向
       if (authState is AuthLoading) return null;

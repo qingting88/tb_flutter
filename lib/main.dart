@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tb_flutter/core/bloc/tanstack_cubit.dart';
 import 'package:tb_flutter/core/constants/app_constants.dart';
 import 'package:tb_flutter/core/http/index.dart';
 import 'package:tb_flutter/core/http/token_storage.dart';
@@ -55,12 +56,17 @@ void main() async {
         RepositoryProvider.value(value: authRepository),
         RepositoryProvider.value(value: userRepository),
       ],
-      child: BlocProvider(
-        create:
-            (context) => AuthCubit(
-              authRepository: context.read<AuthRepository>(),
-              tokenStorage: tokenStorage,
-            ),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create:
+                (context) => AuthCubit(
+                  authRepository: context.read<AuthRepository>(),
+                  tokenStorage: tokenStorage,
+                ),
+          ),
+          BlocProvider(create: (context) => TanStackCubit()),
+        ],
         child: MultiBlocProvider(
           providers: [
             BlocProvider(

@@ -74,18 +74,23 @@ class ProfilePage extends StatelessWidget {
               ),
 
               const Divider(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 36),
-                child: Row(
-                  spacing: 8,
-                  children: [
-                    SvgIcons.passport,
-                    Text(
-                      'Change password',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    SvgIcons.arrowBlackRight,
-                  ],
+              GestureDetector(
+                onTap: () {
+                  context.go(AppConstants.settingsPasswordRoute);
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 36),
+                  child: Row(
+                    spacing: 8,
+                    children: [
+                      SvgIcons.passport,
+                      Text(
+                        'Change password',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      SvgIcons.arrowBlackRight,
+                    ],
+                  ),
                 ),
               ),
               const Divider(),

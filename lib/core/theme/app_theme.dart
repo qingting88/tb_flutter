@@ -12,7 +12,7 @@ class AppTheme {
   // static const Color disabledColor = Color(0xFFE5E7EB); // 禁用状态颜色
 
   static const Color primaryColor = Color(0xFF5D5FEF);
-  static const Color secondaryColor = Color(0xFF242141);
+  static const Color secondaryColor = Color(0xFF6b29cb);
   static const Color accentColor = Color(0xFFFF1493);
   static const Color neutralColor = Color(0xFF0b042b);
   static const Color infoColor = Color(0x0b042b65);
@@ -22,6 +22,7 @@ class AppTheme {
 
   static const Color textColor = Color(0xFF242141); // 标题颜色
   static const Color labelColor = Color(0x660b042b); // 文本颜色 #0b042b66
+  static const Color borderColor = Color(0x1AAFAFAF);
 
   // 主题数据 https://m3-theme.zeir.cc/dynamic/palette
   static ThemeData get lightTheme {
@@ -87,11 +88,17 @@ class AppTheme {
 
           bodyLarge: TextStyle(fontSize: 20, color: textColor),
           bodyMedium: TextStyle(fontSize: 16, color: textColor),
-          bodySmall: TextStyle(fontSize: 12, color: textColor),
+          bodySmall: TextStyle(fontSize: 16, color: labelColor),
 
-          labelLarge: TextStyle(fontSize: 20, color: labelColor),
-          labelMedium: TextStyle(fontSize: 16, color: labelColor),
-          labelSmall: TextStyle(fontSize: 12, color: labelColor),
+          // 12px
+          labelLarge: TextStyle(fontSize: 12, color: textColor),
+          labelMedium: TextStyle(fontSize: 12, color: labelColor,height: 1.2),
+          labelSmall: TextStyle(
+            fontSize: 12,
+            color: AppTheme.primaryColor,
+            decoration: TextDecoration.underline,
+            decorationColor: AppTheme.primaryColor,
+          ),
         ),
       ),
       dividerTheme: DividerThemeData(
@@ -99,30 +106,6 @@ class AppTheme {
         thickness: 2,
         endIndent: 0,
         color: Color(0x1aafafaf),
-      ),
-
-      // elevatedButtonTheme: ElevatedButtonThemeData(
-      //   style: ElevatedButton.styleFrom(
-      //     backgroundColor: primaryColor,
-      //     foregroundColor: Colors.white,
-      //     shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.circular(20),
-      //     ),
-      //     minimumSize: const Size(double.infinity, 50),
-      //   ),
-      // ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.grey[100],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
-        ),
-        hintStyle: TextStyle(color: Colors.grey[400]),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 16,
-        ),
       ),
     );
   }

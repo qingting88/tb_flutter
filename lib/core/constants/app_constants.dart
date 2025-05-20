@@ -15,6 +15,8 @@ class AppConstants {
   static const String settingsProfileRoute = '/settings/profile';
   static const String settingsSecurityRoute = '/settings/security';
   static const String settings2faRoute = '/settings/2fa';
+  static const String settingsPasswordRoute = '/settings/password';
+  static const String settingsPasswordNewRoute = '/settings/password/new';
 
   static const String settingsGoogleStep1Route = '/settings/google/step1';
   static const String settingsGoogleStep2Route = '/settings/google/step2';

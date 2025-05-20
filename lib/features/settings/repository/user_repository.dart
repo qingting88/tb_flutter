@@ -31,4 +31,36 @@ class UserRepository {
     }
     return false;
   }
+
+  /// 确认旧密码
+  Future<DataT<Map<String, String>>> useOldPasswordVerifyMutation({
+    required String password,
+  }) async {
+    final response = await _dio.post(
+      "/user/secure/phone/send",
+      data: {"password": password},
+    );
+    return DataT<Map<String, String>>.fromJson(response.data);
+  }
+
+  /// 保存密码
+  Future<DataT<Map<String, String>>> usePasswordUpgradeMutation({
+    required String password,
+  }) async {
+    final response = await _dio.post(
+      "/user/password",
+      data: {"password": password},
+    );
+    return DataT<Map<String, String>>.fromJson(response.data);
+  }
+
+  Future<DataT<Map<String, String>>> useSavePhoneMutation({
+    required String password,
+  }) async {
+    final response = await _dio.post(
+      "/user/secure/phone/send",
+      data: {"password": password},
+    );
+    return DataT<Map<String, String>>.fromJson(response.data);
+  }
 }

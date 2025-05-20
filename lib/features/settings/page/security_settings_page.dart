@@ -77,7 +77,7 @@ class SecuritySettingsPage extends StatelessWidget {
                       ),
                       Text(
                         'fri***ang@gmail.com',
-                        style: Theme.of(context).textTheme.labelSmall,
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                     ],
                   ),
@@ -112,7 +112,7 @@ class SecuritySettingsPage extends StatelessWidget {
                       ),
                       Text(
                         '+01 312***2223',
-                        style: Theme.of(context).textTheme.labelSmall,
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                     ],
                   ),
