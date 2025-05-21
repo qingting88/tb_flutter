@@ -1,152 +1,193 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:tb_flutter/core/theme/app_theme.dart';
+import 'package:flutter/services.dart';
+import 'package:pinput/pinput.dart';
+import 'package:tb_flutter/core/http/http_model.dart';
+import 'package:tb_flutter/core/config/app_theme.dart';
 
-// file:/Users/zhangfei/Documents/GitHub/tb_flutter/lib/core/widgets/verification_code_input.dart
+enum VerificationCodeType { email, google, phone }
+
+enum SendType { initialize, sending, complete }
+
 class VerificationCodeInput extends StatefulWidget {
-  final void Function(String)? onCompleted;
-  final void Function(bool)? onEditing;
-  final int length;
-  final String? errorText; // errorText 参数
-
   const VerificationCodeInput({
     super.key,
-    required this.length,
-    this.onCompleted,
-    this.onEditing,
-    this.errorText, // 传递 errorText
+    this.type = VerificationCodeType.email,
+    this.autoStart = false,
+    this.countdownSeconds = 60,
+    this.title,
+    this.pinFocusNode,
+    required this.onCompleted,
+    this.onPressed,
   });
 
+  final VerificationCodeType type;
+  final String? title;
+  final int countdownSeconds;
+  final bool autoStart;
+  final ValueChanged<String> onCompleted;
+  final Future<DataT<Map<String, String>>> Function()? onPressed;
+
+  final FocusNode? pinFocusNode;
+
   @override
-  State<VerificationCodeInput> createState() => _VerificationCodeInputState();
+  _VerificationCodeState createState() => _VerificationCodeState();
 }
 
-class _VerificationCodeInputState extends State<VerificationCodeInput> {
-  late List<TextEditingController> _controllers = [];
-  late List<FocusNode> _focusNodes = [];
-  late List<String> _codeDigits = [];
+class _VerificationCodeState extends State<VerificationCodeInput> {
+  late int _remainingSeconds;
+  late SendType _sendType;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(
-      widget.length,
-      (index) => TextEditingController(),
-    );
-    _focusNodes = List.generate(
-      widget.length,
-      (index) {
-        final focusNode = FocusNode();
-        focusNode.addListener(() {
-          if (focusNode.hasFocus && widget.onEditing != null) {
-            widget.onEditing!(true);
-          }
-        });
-        return focusNode;
-      },
-    );
-    _codeDigits = List.filled(
-      widget.length,
-      '',
-    );
+    _remainingSeconds = widget.countdownSeconds;
+    _sendType = SendType.initialize;
+    if (widget.autoStart) {
+      _startCountdown();
+    }
   }
 
   @override
   void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    for (var focusNode in _focusNodes) {
-      focusNode.dispose();
-    }
+    _timer?.cancel();
     super.dispose();
   }
 
-  void _onCodeDigitChanged(int index, String value) {
-    if (value.isNotEmpty && value.trim().isNotEmpty) { // 确保输入的是数字
-      if (index < widget.length - 1) {
-        _focusNodes[index + 1].requestFocus();
+  void _startCountdown() {
+    if (_sendType == SendType.sending) return;
+
+    setState(() {
+      _sendType = SendType.sending;
+      _remainingSeconds = widget.countdownSeconds;
+    });
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingSeconds <= 1) {
+        timer.cancel();
+        setState(() {
+          _sendType = SendType.complete;
+          _remainingSeconds = widget.countdownSeconds;
+        });
       } else {
-        _focusNodes[index].unfocus();
+        setState(() {
+          _remainingSeconds--;
+        });
       }
-
-      setState(() {
-        _codeDigits[index] = value.trim(); // 去除空格
-      });
-
-      // 检查是否所有数字都已输入
-      final allDigitsFilled = _codeDigits.every((digit) => digit.isNotEmpty);
-      if (allDigitsFilled) {
-        widget.onCompleted?.call(_codeDigits.join());
-      }
-    } else if (value.isEmpty && index > 0) {
-      // 用户删除了一个数字，将焦点移回上一个输入框
-      _focusNodes[index - 1].requestFocus();
-      setState(() {
-        _codeDigits[index] = '';
-      });
-    }
+    });
   }
 
-  bool _isNumeric(String str) {
-    final numericRegex = RegExp(r'^[0-9]+$');
-    return numericRegex.hasMatch(str);
+  void _handlePress() async {
+    if (_sendType == SendType.sending) return;
+
+    // 触发外部回调
+    try {
+      final result = await widget.onPressed?.call();
+      if (result?.status == STATUS.success.value) {
+        // 开始倒计时
+        _startCountdown();
+        // 震动反馈
+        HapticFeedback.lightImpact();
+      }
+    } catch (e) {
+      // 处理错误
+      print("e");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final defaultPinTheme = PinTheme(
+      width: 56,
+      height: 56,
+      textStyle: Theme.of(context).textTheme.displaySmall,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 1, color: AppTheme.primaryColor),
+        ),
+      ),
+    );
+    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
+      border: Border(
+        bottom: BorderSide(width: 2, color: AppTheme.primaryColor),
+      ),
+    );
+    final errorPinTheme = defaultPinTheme.copyDecorationWith(
+      border: Border(bottom: BorderSide(width: 2, color: AppTheme.errorColor)),
+    );
+
     return Column(
+      spacing: 16,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(
-            widget.length,
-            (index) => SizedBox(
-              width: 50,
-              child: TextField(
-                controller: _controllers[index],
-                focusNode: _focusNodes[index],
-                keyboardType: TextInputType.number,
+        if (widget.title != null) ...[
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 300),
+              child: Text(
+                widget.title ?? '',
+                style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
-                maxLength: 1,
-                decoration: InputDecoration(
-                  counterText: '',
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.primaryColor, width: 2),
-                  ),
-                  filled: true,
-                ),
-                onChanged: (value) {
-                  if (value.isNotEmpty) {
-                    // 检查输入是否为数字
-                    if (_isNumeric(value.trim())) {
-                      _onCodeDigitChanged(index, value);
-                    } else {
-                      // 删除非数字字符
-                      _controllers[index].text = '';
-                    }
-                  } else if (value.isEmpty && index > 0) {
-                    // 用户删除了一个数字，将焦点移回上一个输入框
-                    _focusNodes[index - 1].requestFocus();
-                    setState(() {
-                      _codeDigits[index] = '';
-                    });
-                  }
-                },
               ),
             ),
           ),
+        ],
+        Text(
+          'Verification code',
+          style: Theme.of(context).textTheme.bodySmall
         ),
-        if (widget.errorText != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+        Padding(
+          padding: EdgeInsets.only(left: 32, right: 32, bottom: 8),
+          child: Pinput(
+            length: 6,
+            pinAnimationType: PinAnimationType.slide,
+            // controller: controller,
+            // focusNode: focusNode,
+            defaultPinTheme: defaultPinTheme,
+            focusedPinTheme: focusedPinTheme,
+            errorPinTheme: errorPinTheme,
+            showCursor: true,
+            onCompleted: widget.onCompleted,
+          ),
+        ),
+        if (widget.onPressed != null && _sendType == SendType.initialize) ...[
+          TextButton(
+            onPressed: _handlePress,
             child: Text(
-              widget.errorText!,
-              style: const TextStyle(color: Colors.red),
+              'Send verification code',
+              style: TextStyle(
+                color: AppTheme.primaryColor,
+                decoration: TextDecoration.underline,
+                decorationColor: AppTheme.primaryColor,
+                fontSize: 12,
+              ),
             ),
           ),
+        ],
+        if (widget.onPressed != null && _sendType == SendType.sending) ...[
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              'Resend verification code(${_remainingSeconds}s)',
+              style: TextStyle(color: AppTheme.labelColor, fontSize: 12),
+            ),
+          ),
+        ],
+        if (widget.onPressed != null && _sendType == SendType.complete) ...[
+          TextButton(
+            onPressed: _handlePress,
+            child: Text(
+              'Resend verification code',
+              style: TextStyle(
+                color: AppTheme.primaryColor,
+                decoration: TextDecoration.underline,
+                decorationColor: AppTheme.primaryColor,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }

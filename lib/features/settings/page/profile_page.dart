@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
-import 'package:tb_flutter/core/theme/app_theme.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
+import 'package:tb_flutter/core/config/app_theme.dart';
+import 'package:tb_flutter/core/widgets/app_button.dart';
 import 'package:tb_flutter/core/widgets/app_dialog.dart';
 import 'package:tb_flutter/core/widgets/svgo.dart';
 
@@ -111,7 +112,16 @@ class ProfilePage extends StatelessWidget {
                         content: 'Are you sure you want to Log out?',
                         btns: [
                           DialogButton(text: 'Stay', onClick: () {}),
-                          DialogButton(text: 'Logout', onClick: () {}),
+                          DialogButton(
+                            text: 'Logout',
+                            buttonType: ButtonType.error,
+                            onClick: () async{
+                              // final a=await context
+                              //     .read<UserRepository>()
+                              //     .usePasswordUpgradeMutation(password: "");
+                              //     return true
+                            },
+                          ),
                         ],
                       );
                     },

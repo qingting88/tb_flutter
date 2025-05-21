@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tb_flutter/features/auth/bloc/auth_cubit.dart';
+import 'package:tb_flutter/core/bloc/auth_cubit.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});

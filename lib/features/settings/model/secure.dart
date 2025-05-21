@@ -7,6 +7,14 @@ class ISecureSetting {
   final bool two_factor,email_verify,phone_verify;
   ISecureSetting({required this.two_factor,required this.email_verify,required this.phone_verify});
 
+  ISecureSetting copyWith({bool? two_factor, bool? email_verify, bool? phone_verify}) {
+    return ISecureSetting(
+      two_factor: two_factor ?? this.two_factor,
+      email_verify: email_verify ?? this.email_verify,
+      phone_verify: phone_verify ?? this.phone_verify,
+    );
+  }
+
   /// factory.
   factory ISecureSetting.fromJson(Map<String, dynamic> json) => _$ISecureSettingFromJson(json);
 

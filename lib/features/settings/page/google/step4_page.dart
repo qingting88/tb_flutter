@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
-import 'package:tb_flutter/features/settings/widget/security_verification.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
+import 'package:tb_flutter/core/widgets/verification_code_input.dart';
 import 'package:tb_flutter/features/settings/widget/stepper.dart';
 
 class GoogleStep4Page extends StatelessWidget {
-  const GoogleStep4Page({Key? key}) : super(key: key);
+  const GoogleStep4Page({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +44,9 @@ class GoogleStep4Page extends StatelessWidget {
                     totalSteps: 4, // 总步骤数
                   ),
                 ),
-                SecurityVerification(
+                VerificationCodeInput(
                   title: "Enter the 6-digit code from Authenticator",
-                  type: SecurityVerificationType.google,
+                  type: VerificationCodeType.google,
                   onCompleted:
                       (code) => {
                         context.go(AppConstants.settingsSecurityRoute),

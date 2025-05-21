@@ -2,12 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/widgets/gradient_background.dart';
-import 'package:tb_flutter/features/auth/bloc/signin/bloc.dart';
-import 'package:tb_flutter/features/auth/bloc/signin/event.dart';
-import 'package:tb_flutter/features/auth/bloc/signin/state.dart';
+import 'package:tb_flutter/core/bloc/tan_stack_cubit.dart';
+import 'package:tb_flutter/core/repository/user_repository.dart';
+import 'package:tb_flutter/core/bloc/auth_cubit.dart';
 
-import '../../../../core/constants/app_constants.dart';
+import '../../../core/config/app_constants.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_logo.dart';
@@ -32,9 +31,11 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState!.validate()) {
       final username = _emailController.text;
       final password = _passwordController.text;
-      context.read<SignInBloc>().add(
-        LoginSignInEvent(username: username, password: password),
+      func() => context.read<UserRepository>().useLoginMutation(
+        username: username,
+        password: password,
       );
+      return context.read<TanStackCubit>().mutation(func);
     }
   }
 
@@ -61,146 +62,120 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: BlocBuilder<SignInBloc, SignInState>(
-        builder: (context, state) {
-          return GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: GradientBackground(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: constraints.maxHeight,
+    final auth = context.read<AuthCubit>();
+    return BlocListener<TanStackCubit, TanStackState>(
+      listener: (context, state) {
+        // do stuff here based on BlocA's state
+        if (state.isSuccess) {
+          auth.authCheckRequested();
+        }
+      },
+      child: Column(
+        children: [
+          const SizedBox(height: 40),
+          const Center(child: AppLogo(size: 50)),
+          const SizedBox(height: 60),
+          Container(
+            padding: const EdgeInsets.only(
+              top: 36,
+              left: 8,
+              right: 8,
+              bottom: 8,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(40),
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      'Login',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: AppTextField(
+                      hintText: 'Email address',
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: Validators.validateEmail,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: AppTextField(
+                      hintText: 'Password',
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      validator: Validators.validatePassword,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                        onPressed: _togglePasswordVisibility,
                       ),
-                      child: IntrinsicHeight(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(
-                            20,
-                            20,
-                            20,
-                            MediaQuery.of(context).padding.bottom + 20,
-                          ),
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 40),
-                              const Center(child: AppLogo(size: 50)),
-                              const SizedBox(height: 60),
-                              Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Form(
-                                  key: _formKey,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Center(
-                                        child: Text(
-                                          'Login',
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 30),
-                                      AppTextField(
-                                        hintText: 'Email address',
-                                        controller: _emailController,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        validator: Validators.validateEmail,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      AppTextField(
-                                        hintText: 'Password',
-                                        controller: _passwordController,
-                                        obscureText: _obscurePassword,
-                                        validator: Validators.validatePassword,
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            _obscurePassword
-                                                ? Icons.visibility_off
-                                                : Icons.visibility,
-                                            color: Colors.grey,
-                                          ),
-                                          onPressed: _togglePasswordVisibility,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Center(
-                                        child: TextButton(
-                                          onPressed:
-                                              () => _handleForgotPassword(
-                                                context,
-                                              ),
-                                          child: Text.rich(
-                                            TextSpan(
-                                              text: 'Forgot password?',
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                                decorationColor: Colors.blue,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      AppButton(
-                                        text: 'Next',
-                                        onPressed:
-                                            () => _handleLoginNext(context),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              Center(
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: "Doesn't have an account yet? ",
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: 'Sign Up',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        recognizer:
-                                            TapGestureRecognizer()
-                                              ..onTap =
-                                                  () => _handleSignup(context),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: TextButton(
+                      onPressed: () => _handleForgotPassword(context),
+                      child: Text.rich(
+                        TextSpan(
+                          text: 'Forgot password?',
+                          style: Theme.of(context).textTheme.labelSmall,
                         ),
                       ),
                     ),
-                  );
-                },
+                  ),
+                  const SizedBox(height: 10),
+                  BlocBuilder<TanStackCubit, TanStackState>(
+                    builder: (_, state) {
+                      return AppButton(
+                        text: 'NEXT',
+                        isLoading: state.isLoading,
+                        onPressed: () => _handleLoginNext(context),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-          );
-        },
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: RichText(
+              text: TextSpan(
+                text: "Doesn't have an account yet? ",
+                style: const TextStyle(color: Colors.white, fontSize: 12),
+                children: [
+                  TextSpan(
+                    text: 'Sign Up',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    recognizer:
+                        TapGestureRecognizer()
+                          ..onTap = () => _handleSignup(context),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

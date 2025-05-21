@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
-import 'package:tb_flutter/features/auth/bloc/auth_cubit.dart';
-import 'package:tb_flutter/features/auth/bloc/auth_state.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
+import 'package:tb_flutter/core/bloc/auth_cubit.dart';
 
 class MainLayout extends StatefulWidget {
   final Widget child;

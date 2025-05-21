@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
 import 'package:tb_flutter/core/widgets/app_button.dart';
 import 'package:tb_flutter/core/widgets/gradient_background.dart';
 
-class RegistrationCompletePage extends StatelessWidget {
-  const RegistrationCompletePage({super.key});
+class SignUpCompletePage extends StatelessWidget {
+  const SignUpCompletePage({super.key});
 
   @override
   Widget build(BuildContext context) {

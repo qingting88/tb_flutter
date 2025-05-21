@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/gradient_background.dart';
 import 'package:tb_flutter/core/widgets/verification_code_input.dart';
@@ -35,7 +35,7 @@ class _ForgotPasswordVerificationPageState extends State<ForgotPasswordVerificat
 
     // 如果验证通过，跳转到设置密码页面
     if (smsValid && authenticatorValid) {
-      context.push(AppConstants.passwordSetupRoute);
+      context.push(AppConstants.signUpPasswordRoute);
     }
   }
 
@@ -74,7 +74,7 @@ class _ForgotPasswordVerificationPageState extends State<ForgotPasswordVerificat
         ),
         const SizedBox(height: 30),
         VerificationCodeInput(
-          length: 6,
+          type: VerificationCodeType.email,
           onCompleted: (code) {
             // 处理验证码输入完成逻辑
             if (controller == _smsVerificationController) {
@@ -85,13 +85,13 @@ class _ForgotPasswordVerificationPageState extends State<ForgotPasswordVerificat
             }
             // TODO:校验验证码正确与否
           },
-          onEditing: (isEditing) {
-            if (isEditing && _keyboardIsShow == false) {
-              _keyboardIsShow = true;
-              _scrollToBottom();
-            }
-          },
-          errorText: errorText, // 添加 errorText 参数
+          // onEditing: (isEditing) {
+          //   if (isEditing && _keyboardIsShow == false) {
+          //     _keyboardIsShow = true;
+          //     _scrollToBottom();
+          //   }
+          // },
+          // errorText: errorText, // 添加 errorText 参数
         ),
         const SizedBox(height: 30),
       ],

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/bloc/tanstack_cubit.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
+import 'package:tb_flutter/core/bloc/tan_stack_cubit.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
 import 'package:tb_flutter/core/widgets/app_button.dart';
 import 'package:tb_flutter/core/widgets/app_text_field.dart';
-import 'package:tb_flutter/features/settings/repository/user_repository.dart';
+import 'package:tb_flutter/core/repository/user_repository.dart';
 
 class PasswordPage extends StatefulWidget {
   const PasswordPage({super.key});
@@ -33,7 +33,7 @@ class _PasswordPageState extends State<PasswordPage> {
     return BlocListener<TanStackCubit, TanStackState>(
       listener: (context, state) {
         // do stuff here based on BlocA's state
-        if (state is IsSuccess) {
+        if (state.isSuccess) {
           context.go(AppConstants.settingsPasswordNewRoute);
         }
       },
@@ -105,7 +105,7 @@ class _PasswordPageState extends State<PasswordPage> {
                       return AppButton(
                         text: "NEXT",
                         disabled: passwordValue.text.isEmpty,
-                        isLoading: state is IsLoading,
+                        isLoading: state.isLoading,
                         onPressed: () => _onPressed(context),
                       );
                     },

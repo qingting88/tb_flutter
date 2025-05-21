@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
 import 'package:tb_flutter/core/widgets/app_button.dart';
-import 'package:tb_flutter/features/settings/repository/user_repository.dart';
-import 'package:tb_flutter/features/settings/widget/security_verification.dart';
+import 'package:tb_flutter/core/repository/user_repository.dart';
+import 'package:tb_flutter/core/widgets/verification_code_input.dart';
 
-class TwofaPage extends StatefulWidget {
-  const TwofaPage({Key? key}) : super(key: key);
+class TwoFaPage extends StatefulWidget {
+  const TwoFaPage({super.key});
 
   @override
-  _TwofaPage createState() => _TwofaPage();
+  TwoFaPageState createState() => TwoFaPageState();
 }
 
-class _TwofaPage extends State<TwofaPage> {
+class TwoFaPageState extends State<TwoFaPage> {
   final controller = TextEditingController();
   final focusNode = FocusNode();
 
@@ -43,19 +43,19 @@ class _TwofaPage extends State<TwofaPage> {
               Column(
                 spacing: 32,
                 children: [
-                  SecurityVerification(
+                  VerificationCodeInput(
                     title:
                         "The 6-digit code has been sent to j*****e@gmail.com",
-                    type: SecurityVerificationType.sms,
+                    type: VerificationCodeType.email,
                     onPressed:
                         () => context
                             .read<UserRepository>()
                             .useSendEmailMutation(email: 'aaa@qq.com'),
                     onCompleted: (code) => {},
                   ),
-                  SecurityVerification(
+                  VerificationCodeInput(
                     title: "6-digit code has sent to +01 312***3233",
-                    type: SecurityVerificationType.phone,
+                    type: VerificationCodeType.phone,
                     onPressed:
                         () =>
                             context
@@ -63,9 +63,9 @@ class _TwofaPage extends State<TwofaPage> {
                                 .useSendPhoneMutation(),
                     onCompleted: (code) => {},
                   ),
-                  SecurityVerification(
+                  VerificationCodeInput(
                     title: "Enter the 6-digit code from Authenticator",
-                    type: SecurityVerificationType.google,
+                    type: VerificationCodeType.google,
                     onCompleted: (code) => {},
                   ),
                 ],

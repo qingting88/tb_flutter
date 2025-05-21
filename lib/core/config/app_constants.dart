@@ -4,9 +4,9 @@ class AppConstants {
   // 路由名称
   static const String splashRoute = '/splash';
   static const String signUpRoute = '/signup';
-  static const String verificationRoute = '/verification';
-  static const String passwordSetupRoute = '/password-setup';
-  static const String registrationCompleteRoute = '/registration-complete';
+  static const String signUpVerificationRoute = '/signup/verification/:email';
+  static const String signUpPasswordRoute = '/signup/password';
+  static const String signUpCompleteRoute = '/signup/complete';
   static const String homeRoute = '/home';
   static const String loginRoute = '/login';
   static const String forgotPasswordRoute = '/forgotpassword';

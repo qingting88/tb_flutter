@@ -101,13 +101,13 @@ class ErrorT {
   final String code; // CLIENT_ERROR_CODE or SERVER_ERROR_CODE
   final String message;
   final String status; // 'success' or 'error'
-  final List<Map<String, dynamic>> errors;
+  final List<Map<String, dynamic>>? errors;
 
   ErrorT({
     required this.code,
     required this.message,
     required this.status,
-    required this.errors,
+    this.errors,
   });
 
   factory ErrorT.fromJson(Map<String, dynamic> json) {

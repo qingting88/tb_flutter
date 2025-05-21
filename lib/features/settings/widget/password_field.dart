@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tb_flutter/core/theme/app_theme.dart';
+import 'package:tb_flutter/core/config/app_theme.dart';
 import 'package:tb_flutter/core/widgets/app_text_field.dart';
 
 final hasLenChart = RegExp(r'^.{8,20}$');
@@ -33,9 +33,7 @@ class _PasswordFieldsState extends State<PasswordFields> {
     super.initState();
     // 监听控制器变化
     widget.passwordController.addListener(_validatePassword);
-    widget.confirmPasswordController.addListener(
-      _validateConfirmPassword,
-    );
+    widget.confirmPasswordController.addListener(_validateConfirmPassword);
   }
 
   @override
@@ -128,7 +126,7 @@ class _PasswordFieldsState extends State<PasswordFields> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 32),
+          padding: EdgeInsets.symmetric(horizontal: 8),
           child: _buildPasswordRules(),
         ),
       ],
@@ -161,44 +159,30 @@ class _PasswordFieldsState extends State<PasswordFields> {
     ];
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          spacing: 4,
-          children:
-              rules.map((rule) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.check,
-                        color:
-                            rule['valid'] as bool
-                                ? AppTheme.successColor
-                                : AppTheme.labelColor,
-                        size: 20,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        rule['description'] as String,
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    ],
+      spacing: 4,
+      children:
+          rules.map((rule) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.check,
+                    color:
+                        rule['valid'] as bool
+                            ? AppTheme.successColor
+                            : AppTheme.labelColor,
+                    size: 20,
                   ),
-                );
-              }).toList(),
-        ),
-        // SizedBox(height: 8),
-        // if (_passwordController.text.isNotEmpty &&
-        //     _confirmPasswordController.text.isNotEmpty)
-        //   Text(
-        //     _passwordsMatch ? '密码匹配 ✓' : '密码不匹配 ✗',
-        //     style: TextStyle(
-        //       color: _passwordsMatch ? Colors.green : Colors.red,
-        //     ),
-        //   ),
-      ],
+                  SizedBox(width: 8),
+                  Text(
+                    rule['description'] as String,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
     );
   }
 }

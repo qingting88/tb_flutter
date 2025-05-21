@@ -22,8 +22,4 @@ class HttpService {
   // 获取Dio实例
   Dio get dio => _dio;
 
-  // Future<T> get<T>(String path, {Object? data}) async {
-  //   final response = await _dio.get(path, data: data);
-  //   final result= DataT<T>.fromJson(response.data);
-  // }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tb_flutter/core/theme/app_theme.dart';
+import 'package:tb_flutter/core/config/app_theme.dart';
 
 enum InputTheme { border, filled }
 
@@ -42,7 +42,7 @@ class AppTextField extends StatelessWidget {
         hintStyle: Theme.of(context).textTheme.bodySmall,
         errorStyle: TextStyle(
           fontSize: 12,
-          color: AppTheme.accentColor,
+          color: AppTheme.errorColor,
         ),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: AppTheme.borderColor, width: 1.5),
@@ -51,7 +51,7 @@ class AppTextField extends StatelessWidget {
           borderSide: BorderSide(color: AppTheme.secondaryColor, width: 1.5),
         ),
         errorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppTheme.accentColor, width: 1.5),
+          borderSide: BorderSide(color: AppTheme.errorColor, width: 1.5),
         ),
         // focusedBorder: OutlineInputBorder(borderSide:BorderSide(color: Theme.of(context).colorScheme.errorContainer)),
       ),

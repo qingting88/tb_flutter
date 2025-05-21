@@ -1,24 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
 import 'package:tb_flutter/core/http/token_storage.dart';
+import 'package:tb_flutter/core/widgets/app_dialog.dart';
 import 'package:tb_flutter/router.dart';
 
 import 'http_model.dart';
-
-class DialogButton {
-  final String text;
-  final Function? onClick;
-
-  DialogButton({required this.text, this.onClick});
-}
 
 class ServerException implements Exception {
   final String message;
   const ServerException(this.message);
 }
-
 
 // 拦截返回数据，进行统一处理
 class ResponseInterceptors<T> extends Interceptor {
@@ -44,7 +37,7 @@ class ResponseInterceptors<T> extends Interceptor {
 
       switch (error.code) {
         case CLIENT_ERROR_CODE.UNAUTHENTICATED:
-          _showDialog(
+          AppDialog.show(
             title: 'Login Status Invalid',
             content:
                 'The current login status has expired, please log in again',
@@ -60,7 +53,7 @@ class ResponseInterceptors<T> extends Interceptor {
           );
           break;
         case CLIENT_ERROR_CODE.UNAUTHENTICATED_BY_DEVICE_CHANGE:
-          _showDialog(
+          AppDialog.show(
             title: 'Login Status Invalid',
             content: error.message,
             btns: [
@@ -75,7 +68,7 @@ class ResponseInterceptors<T> extends Interceptor {
           );
           break;
         case CLIENT_ERROR_CODE.USER_LOGIN_CREDENTIALS_INCORRECT:
-          _showDialog(
+          AppDialog.show(
             content: error.message,
             btns: [
               DialogButton(text: 'Cancel'),
@@ -91,7 +84,7 @@ class ResponseInterceptors<T> extends Interceptor {
           );
           break;
         case CLIENT_ERROR_CODE.USER_EMAIL_NOT_EXIST:
-          _showDialog(
+          AppDialog.show(
             content: error.message,
             btns: [
               DialogButton(text: 'Cancel'),
@@ -121,14 +114,13 @@ class ResponseInterceptors<T> extends Interceptor {
             CLIENT_ERROR_CODE.VERIFICATION_EVENT_INVALID ||
             CLIENT_ERROR_CODE.SYSTEM_FORBIDDEN_REGION ||
             CLIENT_ERROR_CODE.USER_EMAIL_NOT_EXIST:
-          _showDialog(content: error.message);
+          AppDialog.show(content: error.message);
           break;
         default:
-          _showDialog(content: error.message);
+          AppDialog.show(content: error.message);
           break;
       }
       throw ServerException(error.message);
-
     } else if (json['status'] == "success") {
       final data = DataT.fromJson(json);
       switch (data.code) {
@@ -149,7 +141,7 @@ class ResponseInterceptors<T> extends Interceptor {
 
           break;
         case SUCCESS_CODE.LOGOUT:
-          _showDialog(
+          AppDialog.show(
             title: "Login Status Invalid",
             content:
                 "The current login status has expired, please log in again",
@@ -186,42 +178,5 @@ class ResponseInterceptors<T> extends Interceptor {
       );
     }
     return handler.next(err);
-  }
-
-  void _showDialog({
-    String? title,
-    required String content,
-    List<DialogButton>? btns,
-  }) {
-    final overlayState = navigatorKey.currentState?.overlay;
-    if (overlayState == null) return;
-    showDialog(
-      context: navigatorKey.currentContext!,
-      builder:
-          (ctx) => AlertDialog(
-            title: title != null ? Text(title) : null,
-            content: Text(content),
-            actions: [
-              if (btns != null)
-                for (var btn in btns)
-                  TextButton(
-                    child: Text(btn.text),
-                    onPressed: () {
-                      if (btn.onClick != null) {
-                        btn.onClick?.call();
-                        Navigator.of(ctx).pop();
-                      } else {
-                        Navigator.of(ctx).pop();
-                      }
-                    },
-                  ),
-              if (btns == null)
-                TextButton(
-                  child: const Text('Got it'),
-                  onPressed: () => Navigator.of(ctx).pop(),
-                ),
-            ],
-          ),
-    );
   }
 }

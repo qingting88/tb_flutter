@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
 
 class SecondaryLayout extends StatelessWidget {
   final Widget child;

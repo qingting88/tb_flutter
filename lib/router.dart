@@ -2,20 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
 import 'package:tb_flutter/core/layouts/main.dart';
 import 'package:tb_flutter/core/layouts/secondary.dart';
-import 'package:tb_flutter/features/auth/bloc/auth_cubit.dart';
-import 'package:tb_flutter/features/auth/bloc/auth_state.dart';
+import 'package:tb_flutter/core/layouts/unauth.dart';
+import 'package:tb_flutter/core/bloc/auth_cubit.dart';
 import 'package:tb_flutter/features/auth/page/forgot_password_page.dart';
 import 'package:tb_flutter/features/auth/page/forgot_password_verification_page.dart';
 import 'package:tb_flutter/features/home/page/home_page.dart';
 import 'package:tb_flutter/features/auth/page/login_page.dart';
-import 'package:tb_flutter/features/auth/page/password_setup_page.dart';
-import 'package:tb_flutter/features/auth/page/registration_complete_page.dart';
-import 'package:tb_flutter/features/auth/page/sign_up_page.dart';
+import 'package:tb_flutter/features/auth/page/signup/password_page.dart';
+import 'package:tb_flutter/features/auth/page/signup/complete_page.dart';
+import 'package:tb_flutter/features/auth/page/signup/index_page.dart';
 import 'package:tb_flutter/features/auth/page/splash_page.dart';
-import 'package:tb_flutter/features/auth/page/verification_page.dart';
+import 'package:tb_flutter/features/auth/page/signup/verification_page.dart';
 import 'package:tb_flutter/features/settings/page/google/step1_page.dart';
 import 'package:tb_flutter/features/settings/page/google/step2_page.dart';
 import 'package:tb_flutter/features/settings/page/google/step3_page.dart';
@@ -44,25 +44,10 @@ class AppRouter {
         path: AppConstants.splashRoute,
         builder: (context, state) => const SplashPage(),
       ),
+
       GoRoute(
-        path: AppConstants.loginRoute,
-        builder: (context, state) => const LoginPage(),
-      ),
-      GoRoute(
-        path: AppConstants.signUpRoute,
-        builder: (context, state) => const SignUpPage(),
-      ),
-      GoRoute(
-        path: AppConstants.verificationRoute,
-        builder: (context, state) => const VerificationPage(),
-      ),
-      GoRoute(
-        path: AppConstants.passwordSetupRoute,
-        builder: (context, state) => const PasswordSetupPage(),
-      ),
-      GoRoute(
-        path: AppConstants.registrationCompleteRoute,
-        builder: (context, state) => const RegistrationCompletePage(),
+        path: AppConstants.signUpCompleteRoute,
+        builder: (context, state) => const SignUpCompletePage(),
       ),
       GoRoute(
         path: AppConstants.forgotPasswordRoute,
@@ -71,6 +56,30 @@ class AppRouter {
       GoRoute(
         path: AppConstants.forgotPasswordVerificationRoute,
         builder: (context, state) => const ForgotPasswordVerificationPage(),
+      ),
+      ShellRoute(
+        builder: (context, state, child) => UnAuthLayout(child: child),
+        routes: [
+          GoRoute(
+            path: AppConstants.loginRoute,
+            builder: (context, state) => const LoginPage(),
+          ),
+          GoRoute(
+            path: AppConstants.signUpRoute,
+            builder: (context, state) => const SignUpPage(),
+          ),
+          GoRoute(
+            path: AppConstants.signUpVerificationRoute,
+            builder: (context, state) {
+              final email = state.pathParameters['email'];
+              return SignUpVerificationPage(email: email!);
+            },
+          ),
+          GoRoute(
+            path: AppConstants.signUpPasswordRoute,
+            builder: (context, state) => const SignUpPasswordPage(),
+          ),
+        ],
       ),
       ShellRoute(
         builder: (context, state, child) => MainLayout(child: child),
@@ -110,7 +119,7 @@ class AppRouter {
           ),
           GoRoute(
             path: AppConstants.settings2faRoute,
-            builder: (context, state) => const TwofaPage(),
+            builder: (context, state) => const TwoFaPage(),
           ),
           GoRoute(
             path: AppConstants.settingsPasswordRoute,
@@ -133,9 +142,9 @@ class AppRouter {
       // 定义不需要认证的路径
       const unauthenticatedPaths = [
         AppConstants.signUpRoute,
-        AppConstants.verificationRoute,
-        AppConstants.passwordSetupRoute,
-        AppConstants.registrationCompleteRoute,
+        AppConstants.signUpVerificationRoute,
+        AppConstants.signUpPasswordRoute,
+        AppConstants.signUpCompleteRoute,
         AppConstants.forgotPasswordRoute,
         AppConstants.forgotPasswordVerificationRoute,
         AppConstants.loginRoute,
@@ -148,7 +157,7 @@ class AppRouter {
         "登陆状态 $isLoggedIn 当前路径 ${state.fullPath} authState: ${authState.toString()} isUnauthenticatedPath: $isUnauthenticatedPath",
       );
 
-      final home = AppConstants.loginRoute;
+      final home = AppConstants.homeRoute;
 
       // 如果正在加载中，不进行重定向
       if (authState is AuthLoading) return null;

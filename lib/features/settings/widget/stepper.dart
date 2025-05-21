@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tb_flutter/core/theme/app_theme.dart';
+import 'package:tb_flutter/core/config/app_theme.dart';
 
 class HorizontalStepper extends StatelessWidget {
   final int currentStep; // 当前步骤（从1开始）

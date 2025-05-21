@@ -1,45 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tb_flutter/core/bloc/tanstack_cubit.dart';
-import 'package:tb_flutter/core/constants/app_constants.dart';
+import 'package:tb_flutter/core/bloc/tan_stack_cubit.dart';
+import 'package:tb_flutter/core/config/app_constants.dart';
 import 'package:tb_flutter/core/http/index.dart';
 import 'package:tb_flutter/core/http/token_storage.dart';
-import 'package:tb_flutter/core/theme/app_theme.dart';
-import 'package:tb_flutter/features/auth/bloc/auth_cubit.dart';
-import 'package:tb_flutter/features/auth/bloc/signin/bloc.dart';
-import 'package:tb_flutter/features/auth/bloc/signup/bloc.dart';
+import 'package:tb_flutter/core/config/app_theme.dart';
+import 'package:tb_flutter/core/bloc/auth_cubit.dart';
 import 'package:tb_flutter/features/auth/repository/auth_repository.dart';
-import 'package:tb_flutter/features/settings/repository/user_repository.dart';
+import 'package:tb_flutter/core/repository/user_repository.dart';
 import 'package:tb_flutter/router.dart';
-
-// void main() {
-//   runApp(MyApp());
-//   HttpUtil.instance.rebase('https://qa.treasurebox.com/v1');
-//   //设置Android头部的导航栏透明
-//   if (Platform.isAndroid) {
-//     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-//       statusBarColor: Colors.transparent,
-//     );
-//     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-//   }
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ChangeNotifierProvider(
-//       create: (_) => AuthState(),
-//       child: MaterialApp.router(
-//         title: AppConstants.appName,
-//         theme: AppTheme.lightTheme,
-//         routerConfig: appRouter,
-//         debugShowCheckedModeBanner: false,
-//       ),
-//     );
-//   }
-// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,25 +36,7 @@ void main() async {
           ),
           BlocProvider(create: (context) => TanStackCubit()),
         ],
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create:
-                  (context) => SignInBloc(
-                    authRepository: context.read<AuthRepository>(),
-                    authCubit: context.read<AuthCubit>(),
-                  ),
-            ),
-            BlocProvider(
-              create:
-                  (context) => SignUpBloc(
-                    authRepository: context.read<AuthRepository>(),
-                    authCubit: context.read<AuthCubit>(),
-                  ),
-            ),
-          ],
-          child: MyApp(),
-        ),
+        child: MyApp(),
       ),
     ),
   );

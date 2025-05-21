@@ -13,7 +13,7 @@ class AppTheme {
 
   static const Color primaryColor = Color(0xFF5D5FEF);
   static const Color secondaryColor = Color(0xFF6b29cb);
-  static const Color accentColor = Color(0xFFFF1493);
+  static const Color accentColor = Color(0xFF242141);
   static const Color neutralColor = Color(0xFF0b042b);
   static const Color infoColor = Color(0x0b042b65);
   static const Color successColor = Color(0xFF2cb103);
@@ -92,7 +92,7 @@ class AppTheme {
 
           // 12px
           labelLarge: TextStyle(fontSize: 12, color: textColor),
-          labelMedium: TextStyle(fontSize: 12, color: labelColor,height: 1.2),
+          labelMedium: TextStyle(fontSize: 12, color: labelColor, height: 1.2),
           labelSmall: TextStyle(
             fontSize: 12,
             color: AppTheme.primaryColor,
@@ -107,6 +107,11 @@ class AppTheme {
         endIndent: 0,
         color: Color(0x1aafafaf),
       ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.all<Color>(Colors.white),
+        trackOutlineWidth: WidgetStateProperty.all<double>(0),
+        materialTapTargetSize:MaterialTapTargetSize.padded
+      ),
     );
   }
 
@@ -115,7 +120,7 @@ class AppTheme {
     gradient: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      colors: [accentColor, primaryColor],
+      colors: [errorColor, primaryColor],
     ),
   );
 }
