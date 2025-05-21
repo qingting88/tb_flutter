@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:tb_flutter/core/http/http_model.dart';
-import 'package:tb_flutter/features/auth/model/auth.dart';
-import 'package:tb_flutter/features/settings/model/user.dart';
+import 'package:tb_flutter/core/model/auth.dart';
+import 'package:tb_flutter/core/model/user.dart';
 
 
 class AuthRepository {

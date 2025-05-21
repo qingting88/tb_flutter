@@ -20,10 +20,11 @@ lib/
     theme/           # Theme configuration
     utils/           # Utility functions
     widgets/         # Common widgets
+    repository/      # Repository
+    bloc/            # Bloc
+    model/           # Model
   features/          # Feature modules
     auth/            # Authentication feature
-      bloc/          # Bloc
-      model/         # Model
       page/          # Page
       repository/    # Repository
       widget/        # Widget

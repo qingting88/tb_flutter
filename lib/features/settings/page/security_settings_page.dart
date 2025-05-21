@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tb_flutter/core/bloc/tan_stack_cubit.dart';
 import 'package:tb_flutter/core/widgets/svgo.dart';
 import 'package:tb_flutter/core/bloc/auth_cubit.dart';
-import 'package:tb_flutter/features/settings/model/secure.dart';
-import 'package:tb_flutter/features/settings/model/user.dart';
+import 'package:tb_flutter/core/model/secure.dart';
+import 'package:tb_flutter/core/model/user.dart';
 import 'package:tb_flutter/core/repository/user_repository.dart';
 
 enum SwitchType { ga, email, phone }

@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tb_flutter/core/http/token_storage.dart';
 import 'package:tb_flutter/features/auth/repository/auth_repository.dart';
 import 'package:equatable/equatable.dart';
-import 'package:tb_flutter/features/settings/model/user.dart';
+import 'package:tb_flutter/core/model/user.dart';
 
 abstract class AuthState extends Equatable {
   const AuthState();

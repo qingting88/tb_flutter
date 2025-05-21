@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:tb_flutter/core/http/http_model.dart';
-import 'package:tb_flutter/features/auth/model/auth.dart';
-import 'package:tb_flutter/features/settings/model/secure.dart';
-import 'package:tb_flutter/features/settings/model/user.dart';
+import 'package:tb_flutter/core/model/auth.dart';
+import 'package:tb_flutter/core/model/secure.dart';
+import 'package:tb_flutter/core/model/user.dart';
 
 class UserRepository {
   final Dio _dio;

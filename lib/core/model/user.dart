@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:tb_flutter/features/settings/model/secure.dart';
+import 'package:tb_flutter/core/model/secure.dart';
 
 part 'user.g.dart';
 
