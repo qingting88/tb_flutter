@@ -1,31 +1,48 @@
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tb_flutter/core/http/http_model.dart';
+import 'package:tb_flutter/core/widgets/app_dialog.dart';
 
 class TanStackState<T> extends Equatable {
   final bool isLoading;
   final bool isSuccess;
   final bool isError;
   final List<T>? data;
+  final String? SuccessCode;
   final ErrorT? error;
 
   const TanStackState({
     this.isLoading = false,
     this.isSuccess = false,
     this.isError = false,
+    this.SuccessCode,
     this.data,
     this.error,
   });
 
-  factory TanStackState.initial() => const TanStackState();
+  factory TanStackState.initial() => const TanStackState(
+    isLoading: false,
+    isSuccess: false,
+    SuccessCode: null,
+    isError: false,
+    data: null,
+    error: null,
+  );
 
-  factory TanStackState.loading() =>
-      const TanStackState(isLoading: true, isSuccess: false, isError: false);
+  factory TanStackState.loading() => const TanStackState(
+    isLoading: true,
+    isSuccess: false,
+    isError: false,
+    SuccessCode: null,
+  );
 
-  factory TanStackState.success(List<T> data) => TanStackState(
+  factory TanStackState.success(SuccessT<T> data) => TanStackState(
     isSuccess: true,
     isError: false,
-    data: data,
+    data: data.data,
+    SuccessCode: data.code,
+    error: null,
     isLoading: false,
   );
 
@@ -33,6 +50,8 @@ class TanStackState<T> extends Equatable {
     isError: true,
     isSuccess: false,
     error: error,
+    data: null,
+    SuccessCode: null,
     isLoading: false,
   );
 
@@ -41,6 +60,7 @@ class TanStackState<T> extends Equatable {
     bool? isSuccess,
     bool? isError,
     List<T>? data,
+    String? SuccessCode,
     ErrorT? error,
   }) {
     return TanStackState<T>(
@@ -48,17 +68,25 @@ class TanStackState<T> extends Equatable {
       isSuccess: isSuccess ?? this.isSuccess,
       isError: isError ?? this.isError,
       data: data ?? this.data,
+      SuccessCode: SuccessCode ?? this.SuccessCode,
       error: error ?? this.error,
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, isSuccess, isError, data, error];
+  List<Object?> get props => [
+    isLoading,
+    isSuccess,
+    isError,
+    data,
+    error,
+    SuccessCode,
+  ];
 
   @override
   String toString() {
     return 'TanStackState{isLoading: $isLoading, isSuccess: $isSuccess, '
-        'isError: $isError, data: $data, error: $error}';
+        'isError: $isError, data: $data, SuccessCode: $SuccessCode, error: $error}';
   }
 }
 
@@ -74,26 +102,28 @@ class TanStackCubit<T> extends Cubit<TanStackState<T>> {
 
       // 执行查询函数
       final resp = await func();
+      print(resp);
 
       // 处理响应
-      if (resp.status == 'success') {
-        // 先发射数据状态
-        emit(TanStackState.success(resp.data));
-        // 然后发射成功状态（如果需要）
-        // 注意：通常不需要单独发射IsSuccess，因为success状态已经包含isSuccess=true
-      } else {
+      if (resp is ErrorT) {
+        print(
+          "业务异常 status: ${resp.status} code: ${resp.code} message: ${resp.message}",
+        );
         // 发射错误状态
-        emit(TanStackState.error(resp as ErrorT));
+        emit(TanStackState.error(resp));
+      } else {
+        // 先发射数据状态
+        emit(TanStackState.success(resp as SuccessT<T>));
       }
-    } catch (e) {
+    } on DioException catch (e) {
       // 捕获未预期的异常
       emit(
         TanStackState.error(
           ErrorT(
-            message: e.toString(),
-            code: '500',
+            code: "500",
+            message: e.message as String,
             status: 'error',
-            errors: [],
+            // errors: [],
           ),
         ),
       );
@@ -107,28 +137,29 @@ class TanStackCubit<T> extends Cubit<TanStackState<T>> {
 
       // 执行查询函数
       final resp = await func();
-      print(resp);
-
       // 处理响应
-      if (resp.status == 'success') {
-        // 先发射数据状态
-        emit(TanStackState.success(resp.data));
-        // 然后发射成功状态（如果需要）
-        // 注意：通常不需要单独发射IsSuccess，因为success状态已经包含isSuccess=true
-      } else {
+      if (resp is ErrorT) {
+        print(
+          "业务异常 status: ${resp.status} code: ${resp.code} message: ${resp.message}",
+        );
+        if (resp.intercepted == true) {
+          AppDialog.show(content: resp.message);
+        }
         // 发射错误状态
-        emit(TanStackState.error(resp as ErrorT));
+        emit(TanStackState.error(resp));
+      } else {
+        // 先发射数据状态
+        emit(TanStackState.success(resp as SuccessT<T>));
       }
-    } catch (e) {
-      print(e);
+    } on DioException catch (e) {
       // 捕获未预期的异常
       emit(
         TanStackState.error(
           ErrorT(
-            message: e.toString(),
-            code: '500',
+            code: "500",
+            message: e.message as String,
             status: 'error',
-            errors: [],
+            // errors: [],
           ),
         ),
       );

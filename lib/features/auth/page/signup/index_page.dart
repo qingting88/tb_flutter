@@ -68,6 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
             child: Form(
               key: _formKey,
+              onChanged: () => context.read<TanStackCubit>().reset(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

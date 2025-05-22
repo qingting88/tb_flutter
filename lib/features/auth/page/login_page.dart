@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tb_flutter/core/bloc/tan_stack_cubit.dart';
+import 'package:tb_flutter/core/config/app_theme.dart';
 import 'package:tb_flutter/core/repository/user_repository.dart';
 import 'package:tb_flutter/core/bloc/auth_cubit.dart';
 
@@ -35,12 +36,12 @@ class _LoginPageState extends State<LoginPage> {
         username: username,
         password: password,
       );
-      return context.read<TanStackCubit>().mutation(func);
+      return context.read<TanStackCubit>().query(func);
     }
   }
 
   void _handleForgotPassword(BuildContext context) {
-    context.push(AppConstants.forgotPasswordRoute);
+    context.push(AppConstants.forgotRoute);
   }
 
   void _handleSignup(BuildContext context) {
@@ -88,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             child: Form(
               key: _formKey,
+              onChanged: () => context.read<TanStackCubit>().reset(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -126,6 +128,28 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: _togglePasswordVisibility,
                       ),
                     ),
+                  ),
+                  BlocSelector<TanStackCubit, TanStackState, String>(
+                    selector: (state) {
+                      return state.error?.message ?? '';
+                    },
+                    builder: (_, message) {
+                      // return widget here based on the selected state.
+                      if (message.isNotEmpty) {
+                        return Padding(
+                          padding: EdgeInsets.only(top: 12),
+                          child: Center(
+                            child: Text(
+                              message,
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(color: AppTheme.errorColor),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
                   ),
                   const SizedBox(height: 10),
                   Center(

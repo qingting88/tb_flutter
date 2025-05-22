@@ -7,8 +7,11 @@ import 'package:tb_flutter/core/layouts/main.dart';
 import 'package:tb_flutter/core/layouts/secondary.dart';
 import 'package:tb_flutter/core/layouts/unauth.dart';
 import 'package:tb_flutter/core/bloc/auth_cubit.dart';
-import 'package:tb_flutter/features/auth/page/forgot_password_page.dart';
-import 'package:tb_flutter/features/auth/page/forgot_password_verification_page.dart';
+import 'package:tb_flutter/core/model/secure.dart';
+import 'package:tb_flutter/features/auth/page/forgot/index_page.dart';
+import 'package:tb_flutter/features/auth/page/forgot/email_page.dart';
+import 'package:tb_flutter/features/auth/page/forgot/password_page.dart';
+import 'package:tb_flutter/features/auth/page/two_fa_page.dart';
 import 'package:tb_flutter/features/home/page/home_page.dart';
 import 'package:tb_flutter/features/auth/page/login_page.dart';
 import 'package:tb_flutter/features/auth/page/signup/password_page.dart';
@@ -25,6 +28,8 @@ import 'package:tb_flutter/features/settings/page/password/old_page.dart';
 import 'package:tb_flutter/features/settings/page/profile_page.dart';
 import 'package:tb_flutter/features/settings/page/security_settings_page.dart';
 import 'package:tb_flutter/features/settings/page/two_fa_page.dart';
+import 'package:tb_flutter/features/trade/page/home_page.dart';
+import 'package:tb_flutter/features/wallet/page/home_page.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -49,14 +54,6 @@ class AppRouter {
         path: AppConstants.signUpCompleteRoute,
         builder: (context, state) => const SignUpCompletePage(),
       ),
-      GoRoute(
-        path: AppConstants.forgotPasswordRoute,
-        builder: (context, state) => const ForgotPasswordPage(),
-      ),
-      GoRoute(
-        path: AppConstants.forgotPasswordVerificationRoute,
-        builder: (context, state) => const ForgotPasswordVerificationPage(),
-      ),
       ShellRoute(
         builder: (context, state, child) => UnAuthLayout(child: child),
         routes: [
@@ -79,6 +76,29 @@ class AppRouter {
             path: AppConstants.signUpPasswordRoute,
             builder: (context, state) => const SignUpPasswordPage(),
           ),
+          GoRoute(
+            path: AppConstants.forgotRoute,
+            builder: (context, state) => const ForgotPage(),
+          ),
+          GoRoute(
+            path: AppConstants.forgotEmailRoute,
+            builder: (context, state) {
+              final email = state.pathParameters['email'];
+              return ForgotEmailPage(email: email!);
+            },
+          ),
+          GoRoute(
+            path: AppConstants.forgotPasswordRoute,
+            builder: (context, state) => ForgotPasswordPage(),
+          ),
+          //twoFaRoute
+          GoRoute(
+            path: AppConstants.twoFaRoute,
+            builder: (context, state) {
+              final secure = state.extra as ISecure; //
+              return AuthTwoFaPage(secure: secure);
+            },
+          ),
         ],
       ),
       ShellRoute(
@@ -86,7 +106,27 @@ class AppRouter {
         routes: [
           GoRoute(
             path: AppConstants.homeRoute,
-            builder: (context, state) => const HomePage(),
+            // builder: (context, state) => const HomePage(),
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const HomePage(),
+            ),
+          ),
+          GoRoute(
+            path: '/trade',
+            // builder: (context, state) => const TradeHomeScreen(),
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const TradeHomeScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/wallet',
+            // builder: (context, state) => const WalletHomeScreen(),
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const WalletHomeScreen(),
+            ),
           ),
         ],
       ),
@@ -141,13 +181,15 @@ class AppRouter {
 
       // 定义不需要认证的路径
       const unauthenticatedPaths = [
+        AppConstants.signUpCompleteRoute,
+        AppConstants.loginRoute,
         AppConstants.signUpRoute,
         AppConstants.signUpVerificationRoute,
         AppConstants.signUpPasswordRoute,
-        AppConstants.signUpCompleteRoute,
+        AppConstants.forgotRoute,
+        AppConstants.forgotEmailRoute,
         AppConstants.forgotPasswordRoute,
-        AppConstants.forgotPasswordVerificationRoute,
-        AppConstants.loginRoute,
+        AppConstants.twoFaRoute,
       ];
       final isUnauthenticatedPath = unauthenticatedPaths.any(
         currentLocation.startsWith,

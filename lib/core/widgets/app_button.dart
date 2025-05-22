@@ -79,7 +79,6 @@ class AppButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         padding: EdgeInsets.symmetric(vertical: 0),
         fixedSize: _getThemeSize(),
-        // minimumSize: Size.fromWidth(140),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

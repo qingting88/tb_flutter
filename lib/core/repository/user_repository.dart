@@ -50,6 +50,29 @@ class UserRepository {
     return DataT<IAuth>.fromJson(response.data, (data) => IAuth.fromJson(data));
   }
 
+  /// 忘记密码 发送邮箱验证码
+  Future<DataT<Map<String, String>>> useForgotMutation({
+    required String email,
+  }) async {
+    final response = await _dio.post(
+      "/user/password/reset",
+      data: {"email": email},
+    );
+    return DataT<Map<String, String>>.fromJson(response.data);
+  }
+
+  /// 忘记密码 确认邮箱
+  Future<DataT<Map<String, dynamic>>> useForgotVerifyMutation({
+    required String email,
+    required String code,
+  }) async {
+    final response = await _dio.post(
+      "/user/password/reset/verify",
+      data: {"email": email, "code": code},
+    );
+    return DataT<Map<String, dynamic>>.fromJson(response.data);
+  }
+
   /// 用户信息查询
   Future<DataT<IUserInfo>> useUserInfoQuery() async {
     final response = await _dio.get("/user/account", data: {});
@@ -75,14 +98,10 @@ class UserRepository {
     return DataT<Map<String, String>>.fromJson(response.data);
   }
 
-  /// 安全验证发送 phone
-  Future<bool> use2faVerifyMutation() async {
-    final response = await _dio.post("/user/secure/verify");
-    final result = DataT<Map<String, String>>.fromJson(response.data);
-    if (result.status == STATUS.success.value) {
-      return true;
-    }
-    return false;
+  /// 验证2fa 
+  Future<DataT<Map<String, String>>> use2faVerifyMutation(I2FaVerify param) async {
+    final response = await _dio.post("/user/secure/verify",data: param.toJson());
+    return DataT<Map<String, String>>.fromJson(response.data);
   }
 
   /// 确认旧密码
@@ -90,17 +109,18 @@ class UserRepository {
     required String password,
   }) async {
     final response = await _dio.post(
-      "/user/secure/phone/send",
+      "/user/password/change",
       data: {"password": password},
     );
     return DataT<Map<String, String>>.fromJson(response.data);
   }
 
+  /// 修改手机号码
   Future<DataT<Map<String, String>>> useSavePhoneMutation({
     required String password,
   }) async {
     final response = await _dio.post(
-      "/user/secure/phone/send",
+      "/user/phone/update",
       data: {"password": password},
     );
     return DataT<Map<String, String>>.fromJson(response.data);

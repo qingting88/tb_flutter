@@ -15,7 +15,6 @@ class SUCCESS_CODE {
   static const String USER_ACTION_NEED_VERIFY = "120001";
 }
 
-
 class SERVER_ERROR_CODE {
   static const String DEFAULT = "900000";
   static const String USER_LOGIN_FAIL = "910001";
@@ -97,56 +96,24 @@ class CLIENT_ERROR_CODE {
   static const String PHONE_2FA_UNSET = "230016";
 }
 
-class ErrorT {
-  final String code; // CLIENT_ERROR_CODE or SERVER_ERROR_CODE
-  final String message;
-  final String status; // 'success' or 'error'
-  final List<Map<String, dynamic>>? errors;
-
-  ErrorT({
-    required this.code,
-    required this.message,
-    required this.status,
-    this.errors,
-  });
-
-  factory ErrorT.fromJson(Map<String, dynamic> json) {
-    return ErrorT(
-      code: json['code'],
-      message: json['message'],
-      status: json['status'],
-      errors: List<Map<String, dynamic>>.from(json['errors']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'code': code,
-      'message': message,
-      'status': status,
-      'errors': errors,
-    };
-  }
-}
-
-class DataT<T> {
+class SuccessT<T> extends DataT<T> {
   final List<T> data;
   final String code;
   final String message;
   final String status; // 'success' or 'error'
 
-  DataT({
+  const SuccessT({
     required this.data,
     required this.code,
     required this.message,
     required this.status,
   });
 
-  factory DataT.fromJson(
+  factory SuccessT.fromJson(
     Map<String, dynamic> json, [
     T Function(dynamic)? fromJsonT,
   ]) {
-    return DataT<T>(
+    return SuccessT<T>(
       data:
           (json['data'] as List<dynamic>)
               .map((e) => fromJsonT != null ? fromJsonT(e) : e as T)
@@ -156,14 +123,68 @@ class DataT<T> {
       status: json['status'],
     );
   }
-
-  // Map<String, dynamic> toJson(dynamic Function(T) toJsonT) {
-  //   return {
-  //     'data': toJsonT(data),
-  //     'code': code.value,
-  //     'message': message,
-  //     'status': status,
-  //   };
-  // }
 }
 
+class ErrorT extends DataT<Never> {
+  final String code; // CLIENT_ERROR_CODE or SERVER_ERROR_CODE
+  final String message;
+  final String status;
+  final bool? intercepted; // 'success' or 'error'
+  // final List<dynamic>? errors;
+
+  const ErrorT({
+    required this.code,
+    required this.message,
+    required this.status,
+    // this.errors,
+    this.intercepted,
+  });
+
+  factory ErrorT.fromJson(Map<String, dynamic> json) {
+    // List<dynamic>? errors;
+
+    // if (json['errors'] != null) {
+    //   try {
+    //     final errorsList = json['errors'] as List;
+    //     errors = errorsList.map((e) => e as dynamic).toList();
+    //   } catch (e) {
+    //     errors = null; // 或者记录错误日志
+    //   }
+    // }
+    return ErrorT(
+      code: json['code'],
+      message: json['message'],
+      status: json['status'],
+      intercepted: json['intercepted'] ?? false,
+      // errors: errors,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'code': code,
+      'message': message,
+      'status': status,
+      // 'errors': errors,
+      'intercepted': intercepted ?? false,
+    };
+  }
+}
+
+sealed class DataT<T> {
+  const DataT();
+
+  factory DataT.fromJson(
+    Map<String, dynamic> json, [
+    T Function(dynamic)? fromJsonT,
+  ]) {
+    print("DataT.fromJson");
+    if (json['status'] == STATUS.success.value) {
+      print("$json");
+      return SuccessT<T>.fromJson(json, fromJsonT);
+    } else {
+      print(json);
+      return ErrorT.fromJson(json);
+    }
+  }
+}

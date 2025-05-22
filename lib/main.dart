@@ -6,7 +6,6 @@ import 'package:tb_flutter/core/http/index.dart';
 import 'package:tb_flutter/core/http/token_storage.dart';
 import 'package:tb_flutter/core/config/app_theme.dart';
 import 'package:tb_flutter/core/bloc/auth_cubit.dart';
-import 'package:tb_flutter/features/auth/repository/auth_repository.dart';
 import 'package:tb_flutter/core/repository/user_repository.dart';
 import 'package:tb_flutter/router.dart';
 
@@ -14,7 +13,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final tokenStorage = SecureTokenStorage();
   final httpService = HttpService(tokenStorage: tokenStorage);
-  final AuthRepository authRepository = AuthRepository(httpService.dio);
   final UserRepository userRepository = UserRepository(httpService.dio);
 
   tokenStorage.clearTokens();
@@ -22,7 +20,6 @@ void main() async {
   runApp(
     MultiRepositoryProvider(
       providers: [
-        RepositoryProvider.value(value: authRepository),
         RepositoryProvider.value(value: userRepository),
       ],
       child: MultiBlocProvider(
@@ -30,7 +27,7 @@ void main() async {
           BlocProvider(
             create:
                 (context) => AuthCubit(
-                  authRepository: context.read<AuthRepository>(),
+                  userRepository: context.read<UserRepository>(),
                   tokenStorage: tokenStorage,
                 ),
           ),

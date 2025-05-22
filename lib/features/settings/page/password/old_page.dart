@@ -83,7 +83,7 @@ class _PasswordPageState extends State<PasswordPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      context.go(AppConstants.forgotPasswordRoute);
+                      context.go(AppConstants.forgotRoute);
                     },
                     child: Padding(
                       padding: EdgeInsets.only(top: 40.0),

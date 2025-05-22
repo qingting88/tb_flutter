@@ -111,11 +111,11 @@ class AppDialog extends Dialog {
                     ),
                   ),
               if (btns == null)
-                AppButton(
+                SizedBox(width:140,child: AppButton(
                     onPressed: () => Navigator.of(ctx).pop(),
                     text: 'Got it',
                     buttonSize: ButtonSize.small,
-                  )
+                  ),)
             ],
           ),
     );

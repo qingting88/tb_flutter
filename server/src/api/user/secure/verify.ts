@@ -2,7 +2,7 @@ import { defineEventHandler } from "../../../util";
 
 export default defineEventHandler(() => {
   return {
-    status: "success",
+    status: "error",
     code: "210015",
     message: "The verification code not exist.",
     errors: [

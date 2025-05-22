@@ -85,7 +85,7 @@ class _VerificationCodeState extends State<VerificationCodeInput> {
     // 触发外部回调
     try {
       final result = await widget.onPressed?.call();
-      if (result?.status == STATUS.success.value) {
+      if (result is SuccessT<dynamic>) {
         // 开始倒计时
         _startCountdown();
         // 震动反馈
@@ -133,10 +133,7 @@ class _VerificationCodeState extends State<VerificationCodeInput> {
             ),
           ),
         ],
-        Text(
-          'Verification code',
-          style: Theme.of(context).textTheme.bodySmall
-        ),
+        Text('Verification code', style: Theme.of(context).textTheme.bodySmall),
         Padding(
           padding: EdgeInsets.only(left: 32, right: 32, bottom: 8),
           child: Pinput(

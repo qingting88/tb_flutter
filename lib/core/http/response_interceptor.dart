@@ -8,11 +8,6 @@ import 'package:tb_flutter/router.dart';
 
 import 'http_model.dart';
 
-class ServerException implements Exception {
-  final String message;
-  const ServerException(this.message);
-}
-
 // 拦截返回数据，进行统一处理
 class ResponseInterceptors<T> extends Interceptor {
   final TokenStorage _tokenStorage;
@@ -22,18 +17,10 @@ class ResponseInterceptors<T> extends Interceptor {
   @override
   onResponse(Response response, ResponseInterceptorHandler handler) async {
     final context = navigatorKey.currentContext;
-    final Map<String, dynamic> json =
-        response.data is Map
-            ? response.data as Map<String, dynamic>
-            : throw DioException(
-              requestOptions: response.requestOptions,
-              error: 'Invalid response format',
-            );
-    print('==========请求结果:==========');
-    print(json);
+    final json = DataT<Map<String, dynamic>>.fromJson(response.data);
 
-    if (json['status'] == 'error') {
-      final error = ErrorT.fromJson(json);
+    if (json is ErrorT) {
+      final error = json;
 
       switch (error.code) {
         case CLIENT_ERROR_CODE.UNAUTHENTICATED:
@@ -76,7 +63,7 @@ class ResponseInterceptors<T> extends Interceptor {
                 text: 'Forget Password',
                 onClick: () {
                   if (context != null) {
-                    context.go(AppConstants.forgotPasswordRoute);
+                    context.go(AppConstants.forgotRoute);
                   }
                 },
               ),
@@ -117,12 +104,16 @@ class ResponseInterceptors<T> extends Interceptor {
           AppDialog.show(content: error.message);
           break;
         default:
-          AppDialog.show(content: error.message);
+          if (response.data is Map<String, dynamic>) {
+            final data = response.data as Map<String, dynamic>;
+            final modifiedData = {...data, 'intercepted': true};
+            response.data = modifiedData;
+          }
           break;
       }
-      throw ServerException(error.message);
-    } else if (json['status'] == "success") {
-      final data = DataT.fromJson(json);
+      handler.resolve(response);
+    } else {
+      final data = json as SuccessT;
       switch (data.code) {
         case SUCCESS_CODE.UPGRADE_TOKEN:
           print("==========升级token========== ${data.data[0]['token']}");
@@ -162,7 +153,7 @@ class ResponseInterceptors<T> extends Interceptor {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     print('==========请求异常: ' + err.toString() + "==========");
     if (err.response != null) {
       print('==========请求异常信息: ' + err.response.toString() + "==========");

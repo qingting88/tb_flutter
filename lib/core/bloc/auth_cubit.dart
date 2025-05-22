@@ -1,8 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tb_flutter/core/http/http_model.dart';
 import 'package:tb_flutter/core/http/token_storage.dart';
-import 'package:tb_flutter/features/auth/repository/auth_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tb_flutter/core/model/user.dart';
+import 'package:tb_flutter/core/repository/user_repository.dart';
 
 abstract class AuthState extends Equatable {
   const AuthState();
@@ -29,27 +30,26 @@ class AuthUnauthenticatedState extends AuthState {
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit({
-    required AuthRepository authRepository,
+    required UserRepository userRepository,
     required TokenStorage tokenStorage,
-  }) : _authRepository = authRepository,
+  }) : _userRepository = userRepository,
        _tokenStorage = tokenStorage,
        super(AuthInitial());
 
-  final AuthRepository _authRepository;
+  final UserRepository _userRepository;
   final TokenStorage _tokenStorage;
-
 
   Future<void> authCheckRequested() async {
     final token = await _tokenStorage.getAccessToken();
     print('token: $token');
     if (token != null) {
       emit(AuthLoading());
-      final user = await _authRepository.useUserInfoQuery();
-      emit(
-        user != null
-            ? AuthenticatedState(user)
-            : AuthUnauthenticatedState('user 不存在'),
-      );
+      final resp = await _userRepository.useUserInfoQuery();
+      if (resp is SuccessT<IUserInfo>) {
+        emit(AuthenticatedState(resp.data[0]));
+      } else {
+        emit(AuthUnauthenticatedState('user 不存在'));
+      }
     } else {
       emit(AuthUnauthenticatedState('token 不存在'));
     }
